@@ -1,0 +1,253 @@
+"","country_code","gear","vlength","variable_group","variable_name","unit","val"
+"1","ESP","PS","VL0010","Capacity","Mean LOA of vessels","metre",7.65
+"2","ESP","PS","VL0010","Capacity","Mean age of vessels","year",59
+"3","ESP","PS","VL0010","Capacity","Number of vessels","number",1
+"4","ESP","PS","VL0010","Capacity","Total vessel power","kW",44.13
+"5","ESP","PS","VL0010","Capacity","Total vessel tonnage","GT",1.94
+"6","ESP","PS","VL0010","Capital","Gross debt","euro",0
+"7","ESP","PS","VL0010","Capital","Investments","euro",0
+"8","ESP","PS","VL0010","Capital","Subsidies on investments","euro",0
+"9","ESP","PS","VL0010","Capital","Total assets","euro",0
+"10","ESP","PS","VL0010","Capital","Value of physical capital","euro",0
+"11","ESP","PS","VL0010","Capital","Value of quota and other fishing rights","euro",0
+"12","ESP","PS","VL0010","Effort","Days at sea","day",2
+"13","ESP","PS","VL0010","Effort","Energy consumption","litre",0
+"14","ESP","PS","VL0010","Effort","Fishing days","day",2
+"15","ESP","PS","VL0010","Effort","GT days at sea","GTday",3.88
+"16","ESP","PS","VL0010","Effort","GT fishing days","GTday",3.88
+"17","ESP","PS","VL0010","Effort","Maximum days at sea","day",2
+"18","ESP","PS","VL0010","Effort","Number of fishing trips","number",2
+"19","ESP","PS","VL0010","Effort","kW days at sea","kWday",88.26
+"20","ESP","PS","VL0010","Effort","kW fishing days","kWday",88.26
+"21","ESP","PS","VL0010","Employment","Engaged crew","number",0
+"22","ESP","PS","VL0010","Employment","FTE national","number",0
+"23","ESP","PS","VL0010","Employment","Total hours worked per year (engaged crew)","hour",0
+"24","ESP","PS","VL0010","Employment","Unpaid labour","number",0
+"25","ESP","PS","VL0010","Expenditure","Consumption of fixed capital","euro",0
+"26","ESP","PS","VL0010","Expenditure","Energy costs","euro",0
+"27","ESP","PS","VL0010","Expenditure","Lease/rental payments for quota","euro",0
+"28","ESP","PS","VL0010","Expenditure","Other non-variable costs","euro",0
+"29","ESP","PS","VL0010","Expenditure","Other variable costs","euro",0
+"30","ESP","PS","VL0010","Expenditure","Personnel costs","euro",0
+"31","ESP","PS","VL0010","Expenditure","Repair & maintenance costs","euro",0
+"32","ESP","PS","VL0010","Expenditure","Value of unpaid labour","euro",0
+"33","ESP","PS","VL0010","Income","Gross value of landings","euro",0
+"34","ESP","PS","VL0010","Income","Income from leasing out quota","euro",0
+"35","ESP","PS","VL0010","Income","Operating subsidies","euro",0
+"36","ESP","PS","VL0010","Income","Other income","euro",0
+"37","ESP","PS","VL0612","Capacity","Mean LOA of vessels","metre",10.1205
+"38","ESP","PS","VL0612","Capacity","Mean age of vessels","year",57
+"39","ESP","PS","VL0612","Capacity","Number of vessels","number",17
+"40","ESP","PS","VL0612","Capacity","Total vessel power","kW",875.97
+"41","ESP","PS","VL0612","Capacity","Total vessel tonnage","GT",106.81
+"42","ESP","PS","VL0612","Capital","Gross debt","euro",0
+"43","ESP","PS","VL0612","Capital","Investments","euro",0
+"44","ESP","PS","VL0612","Capital","Subsidies on investments","euro",0
+"45","ESP","PS","VL0612","Capital","Total assets","euro",286629.1899
+"46","ESP","PS","VL0612","Capital","Value of physical capital","euro",286629.1899
+"47","ESP","PS","VL0612","Capital","Value of quota and other fishing rights","euro",0
+"48","ESP","PS","VL0612","Effort","Days at sea","day",977.98
+"49","ESP","PS","VL0612","Effort","Energy consumption","litre",57842.5
+"50","ESP","PS","VL0612","Effort","Fishing days","day",999
+"51","ESP","PS","VL0612","Effort","GT days at sea","GTday",6704.5478
+"52","ESP","PS","VL0612","Effort","GT fishing days","GTday",6860.75
+"53","ESP","PS","VL0612","Effort","Maximum days at sea","day",74.5
+"54","ESP","PS","VL0612","Effort","Number of fishing trips","number",1099
+"55","ESP","PS","VL0612","Effort","kW days at sea","kWday",52866.1186
+"56","ESP","PS","VL0612","Effort","kW fishing days","kWday",53924.7
+"57","ESP","PS","VL0612","Employment","Engaged crew","number",102
+"58","ESP","PS","VL0612","Employment","FTE national","number",88.2583
+"59","ESP","PS","VL0612","Employment","Total hours worked per year (engaged crew)","hour",158865
+"60","ESP","PS","VL0612","Employment","Unpaid labour","number",17
+"61","ESP","PS","VL0612","Expenditure","Consumption of fixed capital","euro",45739.7358
+"62","ESP","PS","VL0612","Expenditure","Energy costs","euro",28792.73
+"63","ESP","PS","VL0612","Expenditure","Lease/rental payments for quota","euro",0
+"64","ESP","PS","VL0612","Expenditure","Other non-variable costs","euro",19285.6755
+"65","ESP","PS","VL0612","Expenditure","Other variable costs","euro",222066.75
+"66","ESP","PS","VL0612","Expenditure","Personnel costs","euro",440321.59
+"67","ESP","PS","VL0612","Expenditure","Repair & maintenance costs","euro",54972.05
+"68","ESP","PS","VL0612","Expenditure","Value of unpaid labour","euro",26474.2419
+"69","ESP","PS","VL0612","Income","Gross value of landings","euro",766484.44
+"70","ESP","PS","VL0612","Income","Income from leasing out quota","euro",0
+"71","ESP","PS","VL0612","Income","Operating subsidies","euro",38845
+"72","ESP","PS","VL0612","Income","Other income","euro",206.975
+"73","ESP","PS","VL1012","Capacity","Mean LOA of vessels","metre",22.8847
+"74","ESP","PS","VL1012","Capacity","Mean age of vessels","year",70
+"75","ESP","PS","VL1012","Capacity","Number of vessels","number",18
+"76","ESP","PS","VL1012","Capacity","Total vessel power","kW",878.89
+"77","ESP","PS","VL1012","Capacity","Total vessel tonnage","GT",139.02
+"78","ESP","PS","VL1012","Capital","Gross debt","euro",1105000
+"79","ESP","PS","VL1012","Capital","Investments","euro",0
+"80","ESP","PS","VL1012","Capital","Subsidies on investments","euro",0
+"81","ESP","PS","VL1012","Capital","Total assets","euro",514087.7351
+"82","ESP","PS","VL1012","Capital","Value of physical capital","euro",514087.7351
+"83","ESP","PS","VL1012","Capital","Value of quota and other fishing rights","euro",0
+"84","ESP","PS","VL1012","Effort","Days at sea","day",1685
+"85","ESP","PS","VL1012","Effort","Energy consumption","litre",431655
+"86","ESP","PS","VL1012","Effort","Fishing days","day",1660
+"87","ESP","PS","VL1012","Effort","GT days at sea","GTday",13012.19
+"88","ESP","PS","VL1012","Effort","GT fishing days","GTday",12817.14
+"89","ESP","PS","VL1012","Effort","Maximum days at sea","day",174.4
+"90","ESP","PS","VL1012","Effort","Number of fishing trips","number",1775
+"91","ESP","PS","VL1012","Effort","kW days at sea","kWday",84287.39
+"92","ESP","PS","VL1012","Effort","kW fishing days","kWday",82592.29
+"93","ESP","PS","VL1012","Employment","Engaged crew","number",81
+"94","ESP","PS","VL1012","Employment","FTE national","number",52.2333
+"95","ESP","PS","VL1012","Employment","Total hours worked per year (engaged crew)","hour",94020
+"96","ESP","PS","VL1012","Employment","Unpaid labour","number",25
+"97","ESP","PS","VL1012","Expenditure","Consumption of fixed capital","euro",78703.2563
+"98","ESP","PS","VL1012","Expenditure","Energy costs","euro",215918.305
+"99","ESP","PS","VL1012","Expenditure","Lease/rental payments for quota","euro",0
+"100","ESP","PS","VL1012","Expenditure","Other non-variable costs","euro",27430.1632
+"101","ESP","PS","VL1012","Expenditure","Other variable costs","euro",157490.63
+"102","ESP","PS","VL1012","Expenditure","Personnel costs","euro",871011.98
+"103","ESP","PS","VL1012","Expenditure","Repair & maintenance costs","euro",102109.345
+"104","ESP","PS","VL1012","Expenditure","Value of unpaid labour","euro",201643.4654
+"105","ESP","PS","VL1012","Income","Gross value of landings","euro",1885401.37
+"106","ESP","PS","VL1012","Income","Income from leasing out quota","euro",29100
+"107","ESP","PS","VL1012","Income","Operating subsidies","euro",0
+"108","ESP","PS","VL1012","Income","Other income","euro",0
+"109","ESP","PS","VL1218","Capacity","Mean LOA of vessels","metre",44.2804
+"110","ESP","PS","VL1218","Capacity","Mean age of vessels","year",85
+"111","ESP","PS","VL1218","Capacity","Number of vessels","number",174
+"112","ESP","PS","VL1218","Capacity","Total vessel power","kW",19088.49
+"113","ESP","PS","VL1218","Capacity","Total vessel tonnage","GT",3707.31
+"114","ESP","PS","VL1218","Capital","Gross debt","euro",6476666.6666
+"115","ESP","PS","VL1218","Capital","Investments","euro",106300
+"116","ESP","PS","VL1218","Capital","Subsidies on investments","euro",0
+"117","ESP","PS","VL1218","Capital","Total assets","euro",9693038.1015
+"118","ESP","PS","VL1218","Capital","Value of physical capital","euro",9693038.1015
+"119","ESP","PS","VL1218","Capital","Value of quota and other fishing rights","euro",0
+"120","ESP","PS","VL1218","Effort","Days at sea","day",19627.89
+"121","ESP","PS","VL1218","Effort","Energy consumption","litre",4294792.9999
+"122","ESP","PS","VL1218","Effort","Fishing days","day",20950.9
+"123","ESP","PS","VL1218","Effort","GT days at sea","GTday",437108.5749
+"124","ESP","PS","VL1218","Effort","GT fishing days","GTday",470214.8267
+"125","ESP","PS","VL1218","Effort","Maximum days at sea","day",544.4171
+"126","ESP","PS","VL1218","Effort","Number of fishing trips","number",24230
+"127","ESP","PS","VL1218","Effort","kW days at sea","kWday",2176120.6594
+"128","ESP","PS","VL1218","Effort","kW fishing days","kWday",2341086.4746
+"129","ESP","PS","VL1218","Employment","Engaged crew","number",1339
+"130","ESP","PS","VL1218","Employment","FTE national","number",975.7066
+"131","ESP","PS","VL1218","Employment","Total hours worked per year (engaged crew)","hour",1756272.1666
+"132","ESP","PS","VL1218","Employment","Unpaid labour","number",104
+"133","ESP","PS","VL1218","Expenditure","Consumption of fixed capital","euro",1654349.4816
+"134","ESP","PS","VL1218","Expenditure","Energy costs","euro",2179431.8532
+"135","ESP","PS","VL1218","Expenditure","Lease/rental payments for quota","euro",0
+"136","ESP","PS","VL1218","Expenditure","Other non-variable costs","euro",2280913.6903
+"137","ESP","PS","VL1218","Expenditure","Other variable costs","euro",4013914.2866
+"138","ESP","PS","VL1218","Expenditure","Personnel costs","euro",18633129.4499
+"139","ESP","PS","VL1218","Expenditure","Repair & maintenance costs","euro",2846291.9349
+"140","ESP","PS","VL1218","Expenditure","Value of unpaid labour","euro",2030248.7848
+"141","ESP","PS","VL1218","Income","Gross value of landings","euro",31325422.5116
+"142","ESP","PS","VL1218","Income","Income from leasing out quota","euro",189000
+"143","ESP","PS","VL1218","Income","Operating subsidies","euro",77641.9
+"144","ESP","PS","VL1218","Income","Other income","euro",1619082.6166
+"145","ESP","PS","VL1824","Capacity","Mean LOA of vessels","metre",41.6867
+"146","ESP","PS","VL1824","Capacity","Mean age of vessels","year",46
+"147","ESP","PS","VL1824","Capacity","Number of vessels","number",176
+"148","ESP","PS","VL1824","Capacity","Total vessel power","kW",36247.26
+"149","ESP","PS","VL1824","Capacity","Total vessel tonnage","GT",9391.12
+"150","ESP","PS","VL1824","Capital","Gross debt","euro",6764754.4
+"151","ESP","PS","VL1824","Capital","Investments","euro",1952885
+"152","ESP","PS","VL1824","Capital","Subsidies on investments","euro",250834.57
+"153","ESP","PS","VL1824","Capital","Total assets","euro",20578099.5249
+"154","ESP","PS","VL1824","Capital","Value of physical capital","euro",20578099.5249
+"155","ESP","PS","VL1824","Capital","Value of quota and other fishing rights","euro",0
+"156","ESP","PS","VL1824","Effort","Days at sea","day",23221.41
+"157","ESP","PS","VL1824","Effort","Energy consumption","litre",8820777.375
+"158","ESP","PS","VL1824","Effort","Fishing days","day",24988.47
+"159","ESP","PS","VL1824","Effort","GT days at sea","GTday",1224797.6874
+"160","ESP","PS","VL1824","Effort","GT fishing days","GTday",1311375.698
+"161","ESP","PS","VL1824","Effort","Maximum days at sea","day",405.897
+"162","ESP","PS","VL1824","Effort","Number of fishing trips","number",29602
+"163","ESP","PS","VL1824","Effort","kW days at sea","kWday",4766251.125
+"164","ESP","PS","VL1824","Effort","kW fishing days","kWday",5113438.7299
+"165","ESP","PS","VL1824","Employment","Engaged crew","number",1899
+"166","ESP","PS","VL1824","Employment","FTE national","number",1560.8581
+"167","ESP","PS","VL1824","Employment","Total hours worked per year (engaged crew)","hour",2809544.7
+"168","ESP","PS","VL1824","Employment","Unpaid labour","number",90
+"169","ESP","PS","VL1824","Expenditure","Consumption of fixed capital","euro",3623336.8651
+"170","ESP","PS","VL1824","Expenditure","Energy costs","euro",4490637.7802
+"171","ESP","PS","VL1824","Expenditure","Lease/rental payments for quota","euro",495895.6937
+"172","ESP","PS","VL1824","Expenditure","Other non-variable costs","euro",4133922.0699
+"173","ESP","PS","VL1824","Expenditure","Other variable costs","euro",8379817.5602
+"174","ESP","PS","VL1824","Expenditure","Personnel costs","euro",34574522.5345
+"175","ESP","PS","VL1824","Expenditure","Repair & maintenance costs","euro",4487384.5815
+"176","ESP","PS","VL1824","Expenditure","Value of unpaid labour","euro",1763826.3395
+"177","ESP","PS","VL1824","Income","Gross value of landings","euro",69647882.3347
+"178","ESP","PS","VL1824","Income","Income from leasing out quota","euro",0
+"179","ESP","PS","VL1824","Income","Operating subsidies","euro",237817.81
+"180","ESP","PS","VL1824","Income","Other income","euro",979096.52
+"181","ESP","PS","VL2440","Capacity","Mean LOA of vessels","metre",57.1314
+"182","ESP","PS","VL2440","Capacity","Mean age of vessels","year",41
+"183","ESP","PS","VL2440","Capacity","Number of vessels","number",101
+"184","ESP","PS","VL2440","Capacity","Total vessel power","kW",37576.75
+"185","ESP","PS","VL2440","Capacity","Total vessel tonnage","GT",13706.12
+"186","ESP","PS","VL2440","Capital","Gross debt","euro",226527.5
+"187","ESP","PS","VL2440","Capital","Investments","euro",5401386.1798
+"188","ESP","PS","VL2440","Capital","Subsidies on investments","euro",313175.2702
+"189","ESP","PS","VL2440","Capital","Total assets","euro",32624678.3697
+"190","ESP","PS","VL2440","Capital","Value of physical capital","euro",32624678.3697
+"191","ESP","PS","VL2440","Capital","Value of quota and other fishing rights","euro",0
+"192","ESP","PS","VL2440","Effort","Days at sea","day",12076.73
+"193","ESP","PS","VL2440","Effort","Energy consumption","litre",11862186.0909
+"194","ESP","PS","VL2440","Effort","Fishing days","day",12260.36
+"195","ESP","PS","VL2440","Effort","GT days at sea","GTday",1587695.2754
+"196","ESP","PS","VL2440","Effort","GT fishing days","GTday",1540673.3779
+"197","ESP","PS","VL2440","Effort","Maximum days at sea","day",306.138
+"198","ESP","PS","VL2440","Effort","Number of fishing trips","number",12241
+"199","ESP","PS","VL2440","Effort","kW days at sea","kWday",4247484.3126
+"200","ESP","PS","VL2440","Effort","kW fishing days","kWday",4170114.7703
+"201","ESP","PS","VL2440","Employment","Engaged crew","number",1689
+"202","ESP","PS","VL2440","Employment","FTE national","number",1472.9482
+"203","ESP","PS","VL2440","Employment","Total hours worked per year (engaged crew)","hour",2651307.0113
+"204","ESP","PS","VL2440","Employment","Unpaid labour","number",51
+"205","ESP","PS","VL2440","Expenditure","Consumption of fixed capital","euro",5494961.117
+"206","ESP","PS","VL2440","Expenditure","Energy costs","euro",6328020.2027
+"207","ESP","PS","VL2440","Expenditure","Lease/rental payments for quota","euro",7305938.83
+"208","ESP","PS","VL2440","Expenditure","Other non-variable costs","euro",5406919.9013
+"209","ESP","PS","VL2440","Expenditure","Other variable costs","euro",8668279.6093
+"210","ESP","PS","VL2440","Expenditure","Personnel costs","euro",55087861.0512
+"211","ESP","PS","VL2440","Expenditure","Repair & maintenance costs","euro",7957604.2195
+"212","ESP","PS","VL2440","Expenditure","Value of unpaid labour","euro",2060889.8979
+"213","ESP","PS","VL2440","Income","Gross value of landings","euro",103668402.2504
+"214","ESP","PS","VL2440","Income","Income from leasing out quota","euro",3069105.7029
+"215","ESP","PS","VL2440","Income","Operating subsidies","euro",1377366.5221
+"216","ESP","PS","VL2440","Income","Other income","euro",2631954.1125
+"217","ESP","PS","VL40XX","Capacity","Mean LOA of vessels","metre",130.2421
+"218","ESP","PS","VL40XX","Capacity","Mean age of vessels","year",45
+"219","ESP","PS","VL40XX","Capacity","Number of vessels","number",30
+"220","ESP","PS","VL40XX","Capacity","Total vessel power","kW",110487.91
+"221","ESP","PS","VL40XX","Capacity","Total vessel tonnage","GT",76026.48
+"222","ESP","PS","VL40XX","Capital","Gross debt","euro",0
+"223","ESP","PS","VL40XX","Capital","Investments","euro",78655658.06
+"224","ESP","PS","VL40XX","Capital","Subsidies on investments","euro",25622.8
+"225","ESP","PS","VL40XX","Capital","Total assets","euro",150108387.564
+"226","ESP","PS","VL40XX","Capital","Value of physical capital","euro",150108387.564
+"227","ESP","PS","VL40XX","Capital","Value of quota and other fishing rights","euro",0
+"228","ESP","PS","VL40XX","Effort","Days at sea","day",7338.41
+"229","ESP","PS","VL40XX","Effort","Energy consumption","litre",98447143.2
+"230","ESP","PS","VL40XX","Effort","Fishing days","day",4366.96
+"231","ESP","PS","VL40XX","Effort","GT days at sea","GTday",19172065.7708
+"232","ESP","PS","VL40XX","Effort","GT fishing days","GTday",11895324.2624
+"233","ESP","PS","VL40XX","Effort","Maximum days at sea","day",360.09
+"234","ESP","PS","VL40XX","Effort","Number of fishing trips","number",348
+"235","ESP","PS","VL40XX","Effort","kW days at sea","kWday",27747759.1439
+"236","ESP","PS","VL40XX","Effort","kW fishing days","kWday",17125312.0764
+"237","ESP","PS","VL40XX","Employment","Engaged crew","number",1905
+"238","ESP","PS","VL40XX","Employment","FTE national","number",1829.6379
+"239","ESP","PS","VL40XX","Employment","Total hours worked per year (engaged crew)","hour",3293348.352
+"240","ESP","PS","VL40XX","Employment","Unpaid labour","number",0
+"241","ESP","PS","VL40XX","Expenditure","Consumption of fixed capital","euro",27157223.0756
+"242","ESP","PS","VL40XX","Expenditure","Energy costs","euro",43906269.596
+"243","ESP","PS","VL40XX","Expenditure","Lease/rental payments for quota","euro",1632030.568
+"244","ESP","PS","VL40XX","Expenditure","Other non-variable costs","euro",29901061.148
+"245","ESP","PS","VL40XX","Expenditure","Other variable costs","euro",104775816.824
+"246","ESP","PS","VL40XX","Expenditure","Personnel costs","euro",75530835.156
+"247","ESP","PS","VL40XX","Expenditure","Repair & maintenance costs","euro",34539433.572
+"248","ESP","PS","VL40XX","Expenditure","Value of unpaid labour","euro",0
+"249","ESP","PS","VL40XX","Income","Gross value of landings","euro",395324293.448
+"250","ESP","PS","VL40XX","Income","Income from leasing out quota","euro",0
+"251","ESP","PS","VL40XX","Income","Operating subsidies","euro",105870.8
+"252","ESP","PS","VL40XX","Income","Other income","euro",198595.6
