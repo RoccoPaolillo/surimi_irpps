@@ -1,4 +1,5 @@
 library(dplyr)
+library(ggplot2)
 
 setwd("C:/Users/rocpa/OneDrive/Documenti/GitHub/surimi_irpps/")
 
@@ -31,3 +32,17 @@ df <- df %>% group_by(id,year,gear,quarter,vlength) %>%
 # compute the weight fish per capita of the individual vessel (identified by vessel_name)
 df <- df %>% group_by(id,year,gear, quarter,vessel_name) %>%
   mutate(pc_weight_fish = (fish_weight_hour * GFW_Fish_hours))
+
+
+df %>% 
+  filter(!is.na(pc_weight_fish)) %>%
+  ggplot( aes(x = id, y = vessel_name, fill = pc_weight_fish)) +
+  geom_tile(color = "black") +
+  scale_fill_gradient(low = "blue", high = "red") + 
+  geom_text(aes(label = round(pc_weight_fish)), color = "white", size = 4) + 
+  facet_wrap(~ quarter, scales = "free_y") + 
+  theme_bw()
+ggsave("hmp.jpg", width = 15, height = 10)
+
+plotly::ggplotly(pl)
+
