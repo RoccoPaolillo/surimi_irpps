@@ -16,6 +16,9 @@ economicdata <- read.csv("df_disaggregate/Economic_data.csv",sep=",")[,-1]
 landing <- landing %>% group_by(id,year,gear,quarter,vlength) %>% 
   mutate(all_fish_weight = sum(tot_fish_weight))
 
+gfw_clear <- gfw_clear %>% group_by(id,year,quarter,vlength) %>%
+  mutate(totGFW_Fish_hours = sum(GFW_Fish_hours))
+
 # merge dataset with information on vessels (gfw_clear) and landing information (landing)
 df <- gfw_clear %>% left_join(landing, by = c("id","year","quarter","vlength"))
 
@@ -23,12 +26,11 @@ df <- gfw_clear %>% left_join(landing, by = c("id","year","quarter","vlength"))
 # then the total of weight that each vessel length category has collected in one hour
 # in each grid, grouped by year and quarter
 df <- df %>% group_by(id,year,gear,quarter,vlength) %>% 
-  mutate(totGFW_Fish_hours = sum(GFW_Fish_hours)) %>%
   mutate(fish_weight_hour = (all_fish_weight/totGFW_Fish_hours))
 
 # compute the weight fish per capita of the individual vessel (identified by vessel_name)
 df <- df %>% group_by(id,year,quarter,vessel_name) %>%
-  mutate(pc_weight_fish = fish_weight_hour * GFW_Fish_hours)
+  mutate(pc_weight_fish = (fish_weight_hour * GFW_Fish_hours))
 
 # extra: ports associated with vessels not NA and match not NA vessels and ports (23 vessels) 
 port_filtered <- port %>% filter(vessel_name %in% gfw_clear$vessel_name)
