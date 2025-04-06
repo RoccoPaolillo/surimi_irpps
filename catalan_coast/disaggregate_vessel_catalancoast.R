@@ -72,4 +72,4 @@ dfv %>% ggplot(aes(x = tot_fish_vessel, y = tot_fish_landing)) +
   xlab("landing computed") +
   ylab("landing target") +
   theme_bw()
-
+ggsave("verification.jpg", width = 10, height = 5)
