@@ -1,27 +1,38 @@
 library(dplyr)
 library(ggplot2)
+library(readxl)
 
-setwd("C:/Users/rocpa/OneDrive/Documenti/GitHub/surimi_irpps/")
+setwd("C:/Users/rocpa/OneDrive/Documenti/GitHub/surimi_irpps/GSA9")
 
 # upload dataset
-effortcd <- read.csv("df_disaggregate/effort_CS_by_id.csv",sep =",")[,-1]
-gfw <- read.csv("df_disaggregate/GFW_Vessel_info.csv",sep =",")[,-1]
+effortcd <- read.csv("effort_CS.csv",sep =",")[,-1]
+gfw <- read.csv("GFW_Vessel_info.csv",sep =",")[,-1]
 names(gfw)[names(gfw) == "Vessel.Name"] <- "vessel_name"
+gfw[gfw$MMSI == 247222320,]$vessel_name <- "MP LEDO"
+gfw[gfw$MMSI == 247045120,]$vessel_name <- "ARINA MADRE"
 gfw_clear <-  gfw[!is.na(gfw$vlength), ]
-landing <- read.csv("df_disaggregate/landing_CS_by_id.csv",sep =",")[,-1]
+# gfw_clear <-  gfw_clear[!is.na(gfw_clear$vessel_name), ]
+
+gfwx <- read_xlsx("GFW_Vessel_info.xlsx")
+gfwx[gfwx$MMSI == 247222320,]$vessel_name <- "MP LEDO"
+gfwx[gfwx$MMSI == 247045120,]$vessel_name <- "ARINA MADRE"
+gfwx_clear <-  gfwx[!is.na(gfwx$vlength), ]
+
+landing <- read.csv("landing_CS.csv",sep =",")[,-1]
 names(landing)[names(landing) == "vlenght"] <- "vlength"
-port <- read.csv("df_disaggregate/port_CS_PS_GFW.csv",sep=",")[,-1]
-economicdata <- read.csv("df_disaggregate/Economic_data.csv",sep=",")[,-1]
+# port <- read.csv("port_CS_PS_GFW.csv",sep=",")
+port <- read_xlsx("port_CS_OTB_GFW.xlsx")
+# economicdata <- read.csv("df_disaggregate/Economic_data.csv",sep=",")
 
 # compute all weight fish landing independent of species for each cell grouped by quarter and length of unknown vessel
 landing <- landing %>% group_by(id,year,gear,quarter,vlength) %>% 
   mutate(all_fish_weight = sum(tot_fish_weight))
 
-gfw_clear <- gfw_clear %>% group_by(id,year,quarter,vlength) %>%
+gfwx_clear <- gfwx_clear %>% group_by(id,year,quarter,vlength) %>%
   mutate(totGFW_Fish_hours = sum(GFW_Fish_hours))
 
 # merge dataset with information on vessels (gfw_clear) and landing information (landing)
-df <- gfw_clear %>% left_join(landing, by = c("id","year","quarter","vlength"))
+df <- gfwx_clear %>% left_join(landing, by = c("id","year","quarter","vlength"))
 
 # compute the total of hours spent fishing by vessels of same vessel length category
 # then the total of weight that each vessel length category has collected in one hour
