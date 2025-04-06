@@ -49,16 +49,14 @@ df <- df %>% group_by(id,year, quarter,vessel_name) %>%
 
 
 df %>% 
-  filter(!is.na(pc_weight_fish)) %>%
+#  filter(!is.na(pc_weight_fish)) %>%
   ggplot( aes(x = id, y = vessel_name, fill = pc_weight_fish)) +
   geom_tile(color = "black") +
   scale_fill_gradient(low = "blue", high = "red") + 
-  geom_text(aes(label = round(pc_weight_fish)), color = "white", size = 4) + 
+  geom_text(aes(label = round(pc_weight_fish, 2)), color = "white", size = 2) + 
   facet_wrap(~ quarter, scales = "free_y") + 
   theme_bw()
-ggsave("hmp.jpg", width = 15, height = 10)
-
-plotly::ggplotly(pl)
+ggsave("hmp.jpg", width = 17, height = 13)
 
 # verification: we take the computed cumulative data in df and compare with target cumulative data in landing
 # we group by id cell, year and quarter
