@@ -24,24 +24,27 @@ names(landing)[names(landing) == "vlenght"] <- "vlength"
 port <- read_xlsx("port_CS_OTB_GFW.xlsx")
 # economicdata <- read.csv("df_disaggregate/Economic_data.csv",sep=",")
 
-# compute all weight fish landing independent of species for each cell grouped by quarter and length of unknown vessel
-landing <- landing %>% group_by(id,year,gear,quarter,vlength) %>% 
+# compute all weight fish landing independent of species for each cell grouped by quarter and length of unknown vessels
+landing_dis <- landing %>% group_by(id,year,quarter,vlength) %>% 
   mutate(all_fish_weight = sum(tot_fish_weight))
+
+landing_dis <- landing_dis %>% select(id,year, quarter, vlength,all_fish_weight)
+landing_dis <- landing_dis[!duplicated(landing_dis),]
 
 gfwx_clear <- gfwx_clear %>% group_by(id,year,quarter,vlength) %>%
   mutate(totGFW_Fish_hours = sum(GFW_Fish_hours))
 
 # merge dataset with information on vessels (gfw_clear) and landing information (landing)
-df <- gfwx_clear %>% left_join(landing, by = c("id","year","quarter","vlength"))
+df <- gfwx_clear %>% left_join(landing_dis, by = c("id","year","quarter","vlength"))
 
 # compute the total of hours spent fishing by vessels of same vessel length category
 # then the total of weight that each vessel length category has collected in one hour
 # in each grid, grouped by year and quarter
-df <- df %>% group_by(id,year,gear,quarter,vlength) %>% 
+df <- df %>% group_by(id,year,quarter,vlength) %>% 
   mutate(fish_weight_hour = (all_fish_weight/totGFW_Fish_hours))
 
 # compute the weight fish per capita of the individual vessel (identified by vessel_name)
-df <- df %>% group_by(id,year,gear, quarter,vessel_name) %>%
+df <- df %>% group_by(id,year, quarter,vessel_name) %>%
   mutate(pc_weight_fish = (fish_weight_hour * GFW_Fish_hours))
 
 
@@ -56,4 +59,28 @@ df %>%
 ggsave("hmp.jpg", width = 15, height = 10)
 
 plotly::ggplotly(pl)
+
+# verification: we take the computed cumulative data in df and compare with target cumulative data in landing
+# we group by id cell, year and quarter
+
+vessel_fish <- df %>% group_by(id,year,quarter,vlength) %>% mutate(tot_fish_vessel = sum(pc_weight_fish)) %>%
+  select(id,year,quarter,vlength,tot_fish_vessel)
+# there are duplicated because this is the sum reported for each vessel of group(id, year, quarter)
+vessel_fish <- vessel_fish[!duplicated(vessel_fish),]
+
+landing_fish <- landing %>% group_by(id,year,quarter,vlength) %>% mutate(tot_fish = sum(tot_fish_weight)) %>%
+  select(id,year,quarter,vlength,tot_fish)
+
+
+vessel_fish_unique <- vessel_fish[!is.na(vessel_fish$tot_fish_vessel), ]
+landing_fish_unique <- landing_fish[!duplicated(landing_fish),]
+
+dfv <- vessel_fish_unique  %>% left_join(landing_fish_unique, by = c("id","year","vlength","quarter"))
+
+dfv %>% ggplot(aes(x = tot_fish_vessel, y = tot_fish)) +
+  geom_point() + 
+  geom_abline(slope = 1, intercept = 0, color = "red") +
+  xlab("landing computed") +
+  ylab("landing target") +
+  theme_bw()
 
