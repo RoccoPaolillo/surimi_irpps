@@ -45,7 +45,7 @@ df <- df %>% group_by(id,year,quarter,vlength) %>%
   mutate(fish_weight_hour = (all_fish_weight/totGFW_Fish_hours))
 
 # compute the weight fish per capita of the individual vessel (identified by vessel_name)
-df <- df %>% group_by(id,year, quarter,vessel_name) %>%
+df <- df %>% group_by(id,year, quarter,vlength, vessel_name) %>%
   mutate(pc_weight_fish = (fish_weight_hour * GFW_Fish_hours))
 
 
