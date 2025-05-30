@@ -1,0 +1,1055 @@
+---
+title: "WP2 - Data Disaggregation"
+author: "Sbrana - Sabatella"
+date: "2025-05-08"
+output: word_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data disaggregation
+
+Effective fisheries management involves the integration of diverse data inputs, primarily biological and socio-economic information.
+However, a persistent challenge lies in the disaggregation of these datasets, which often exist at varying levels of resolution and categorisation.
+This disparity hampers the ability to conduct comprehensive analyses that inform sustainable practices.
+The importance of linking economic performance indicators with spatial data to assess trade-offs between fisheries' impacts on seafloor habitats and their economic outcomes was emphasized also at the WKTRADE4 workshop (ICES, 2024).
+The workshop highlighted the necessity of disaggregated data to evaluate the spatial distribution of fishing efforts and their ecological consequences effectively, proposing some solutions (D’Andrea et al., 2020 (SMART); Bitetto et al., 2022 (SECFISH); Bastardie et al., 2023(DISPLACE)).
+
+## Data public available FDI and AER
+
+Fisheries Dependent Information (FDI) and the Annual Economic Report (AER) are two essential components of the European Union’s data collection and policy-making framework for sustainable fisheries management.
+These systems play a crucial role in supporting the EU’s Common Fisheries Policy (CFP), which aims to ensure that fishing and aquaculture are environmentally, economically, and socially sustainable.
+
+Fisheries Dependent Information (FDI) refers to data collected directly from commercial fishing activities.
+This includes catch data, effort data (e.g., hours at sea, gear type), discards, and socioeconomic information such as crew employment and income.
+FDI is gathered through logbooks, on-board observer programs, port sampling, and surveys of fishers and fleets.
+
+The Annual Economic Report (AER) on the EU fishing fleet is produced by the Scientific, Technical and Economic Committee for Fisheries (STECF).
+It offers an in-depth analysis of the economic performance of the EU’s fishing fleets, combining biological and economic data.
+The AER covers key indicators such as revenue, profitability, fuel consumption, employment, and capital investment.
+It also highlights trends and forecasts for various fleet segments across EU Member States.
+Together, FDI and AER provide a comprehensive, evidence-based foundation for managing EU fisheries sustainably.
+They support transparency, long-term planning, and stakeholder engagement, all of which are vital to balancing conservation objectives with economic and social needs.
+
+## Aims
+
+In this section, we will thoroughly examine all the data available for the purpose of fisheries management at the European level.
+We will highlight critical issues and points of convergence among different datasets.
+Furthermore, an algorithm will be developed to disaggregate the dataset according to spatial and port-of-landing specifications.
+
+# Data manipulation for a Case Study Area
+
+In this section, users are able to establish the parameters for their case study, which will subsequently inform the simulation.
+Data are provided by the EU Data Collection Framework.
+
+```{r library, include=FALSE}
+library(curl)
+library(dplyr)
+library(doBy)
+library(ggplot2)
+library(ggrepel)
+library(ggspatial)
+library(gfwr)
+library(gtsummary)
+library(leaflet)
+library(openxlsx)
+library(RColorBrewer)
+library(reshape2)
+library("rnaturalearth")
+library("rnaturalearthdata")
+library(sf)
+library(tidyverse)
+library(tidytext)
+library(terra)
+library(VennDiagram)
+library(webr)
+
+```
+
+```{r set CS parameters, message=FALSE, warning=FALSE}
+
+CS_name = "FAO GSA09 - Western Med"
+Gear_CS = "OTB"
+Year_CS = "2021"
+Country_CS = "ITA"
+Country_code = "IT"
+GSAs_CS = "GSA09"
+GSAa_CS = "GSA9"
+
+wd = "C:/Users/Alice/OneDrive - CNR/Documenti - SURIMI-Internal-grp/WP2/"
+```
+
+## Step 1 - Open and subset FDI data (Effort and Landing)
+
+Firstly we open and subset data from FDI DCF by: - Gear type - Year - Country
+
+```{r upload data}
+effort = read.csv(paste0(wd,"/AER and FDI datasets (October 24)/FDI_spatial_data_EU28/EU28/spatial_effort_tableau_pts_EU28.csv")) 
+effort = effort %>%  
+         filter(year %in% Year_CS & gear_type %in% Gear_CS & icesname != "") %>%  
+         mutate(totfishdays = as.numeric(totfishdays))
+
+landing = read.csv(paste0(wd,"/AER and FDI datasets (October 24)/FDI_spatial_data_EU28/EU28/spatial_landings_tableau_pts_2021_EU28.csv"))
+landing = landing %>%  
+          filter(year %in% Year_CS & gear_type %in% Gear_CS & icesname != "") %>%
+          mutate(totwghtlandg = as.numeric(totwghtlandg), 
+                 totvallandg = as.numeric(totvallandg))
+
+```
+
+After we used spatial ICES cells to plot landing and effort on maps total 
+
+```{r upload spatial data}
+spatial_effort = read_sf(paste0(wd,"/AER and FDI datasets (October 24)/FDI_spatial_data_EU28/EU28/effort_csquares.shp"))
+spatial_effort = spatial_effort %>% 
+                 filter(icesname != is.na(icesname) & icesname != "")
+
+spatial_landing = read_sf(paste0(wd,"/AER and FDI datasets (October 24)/FDI_spatial_data_EU28/EU28/landings_csquares.shp"))
+spatial_landing = spatial_landing %>% 
+                  filter(icesname != is.na(icesname) & icesname != "")
+
+#total
+effort_sf = st_as_sf(left_join(effort, spatial_effort, by = "icesname"))
+landing_sf = st_as_sf(left_join(landing, spatial_landing, by = "icesname"))
+
+
+world <- ne_countries(scale = "medium", returnclass = "sf", continent = "europe")
+world = st_transform(world, crs = st_crs(effort_sf))
+
+xmin = as.numeric(st_bbox(effort_sf)[1])-0.1
+xmax = as.numeric(st_bbox(effort_sf)[3])+0.1
+ymin = as.numeric(st_bbox(effort_sf)[2])-0.1
+ymax = as.numeric(st_bbox(effort_sf)[4])+0.1
+
+ggplot()+
+  geom_sf(data = effort_sf, aes(fill = log(totfishdays)))+
+  geom_sf(data = world)+
+  coord_sf(xlim = c(xmin, xmax), ylim = c(ymin, ymax))+
+  scale_fill_viridis_c(option = "A")+ 
+  ggtitle(paste0("FDI EU Effort_",Gear_CS,"_",Year_CS))+
+  theme_light()
+
+
+ggplot()+
+  geom_sf(data = landing_sf, aes(fill = log(totwghtlandg)))+
+  geom_sf(data = world)+
+  coord_sf(xlim = c(xmin, xmax), ylim = c(ymin, ymax))+
+  scale_fill_viridis_c(option = "D")+ 
+  ggtitle(paste0("FDI EU Landings_",Gear_CS,"_",Year_CS))+
+  theme_light()
+
+```
+
+and we used spatial ICES cells to plot landing and effort on maps by GSA 
+
+```{r map by GSA}
+#by GSA
+GSA = read_sf("GSA9_CaseStudy/Spatial Input/GSAs_simplified.shp") %>%
+       filter(SECT_COD == GSAs_CS)
+
+effort_GSA = effort_sf %>% 
+              filter(sub_region == GSAa_CS)
+            
+effort_GSA = st_intersection(effort_GSA, GSA)
+
+landing_GSA = landing_sf %>% 
+              filter(sub_region == GSAa_CS)
+landing_GSA = st_intersection(landing_GSA, GSA)
+
+
+effort_sf = effort_GSA
+landing_sf = landing_GSA
+
+CS = GSA
+
+
+world <- ne_countries(scale = "medium", returnclass = "sf", continent = "europe")
+world = st_transform(world, crs = st_crs(CS))
+
+xmin = as.numeric(st_bbox(effort_sf)[1])-0.1
+xmax = as.numeric(st_bbox(effort_sf)[3])+0.1
+ymin = as.numeric(st_bbox(effort_sf)[2])-0.1
+ymax = as.numeric(st_bbox(effort_sf)[4])+0.1
+
+ggplot()+
+  geom_sf(data = effort_sf, aes(fill = log(totfishdays)), color = NA)+
+  scale_fill_viridis_c(option = "A", na.value = "white")+ 
+  geom_sf(data = world)+
+  coord_sf(xlim = c(xmin, xmax), ylim = c(ymin, ymax))+
+  annotation_scale(location = "tl", width_hint = 0.5) +
+  annotation_north_arrow(location = "tl", which_north = "true", 
+                         pad_x = unit(0.75, "in"), pad_y = unit(0.5, "in"),
+                         style = north_arrow_fancy_orienteering) +
+  ggtitle(paste0("FDI Effort_",CS_name,"_",Gear_CS,"_",Year_CS))+
+  theme_light()
+
+
+ggplot()+
+  geom_sf(data = landing_sf, aes(fill = log(totwghtlandg)), color = NA)+
+  scale_fill_viridis_c(option = "D",  na.value = "white")+ 
+  geom_sf(data = world)+
+  coord_sf(xlim = c(xmin, xmax), ylim = c(ymin, ymax))+
+  annotation_scale(location = "tl", width_hint = 0.5) +
+  annotation_north_arrow(location = "tl", which_north = "true", 
+                         pad_x = unit(0.75, "in"), pad_y = unit(0.5, "in"),
+                         style = north_arrow_fancy_orienteering) +
+  ggtitle(paste0("FDI Landing_",CS_name,"_",Gear_CS,"_",Year_CS))+
+  theme_light()
+
+# write_sf(effort_sf, "GSA9_CaseStudy/Data/FDI_effort_CS.shp")
+# write_sf(landing_sf, "GSA9_CaseStudy/Data/FDI_landing_CS.shp")
+# write.csv(
+#   st_drop_geometry(effort_sf) %>%
+#     rename(id = icesname, gear = gear_type, vlength = vessel_length, tot_fish_day = totfishdays), "GSA9_CaseStudy/Data/FDI_effort_CS.csv", row.names = F)
+# 
+# write.csv(
+#   st_drop_geometry(landing_sf) %>%
+#     rename(id = icesname, gear = gear_type, vlength = vessel_length, tot_fish_weight = totwghtlandg, tot_fish_value = totvallandg),
+#   "GSA9_CaseStudy/Data/FDI_landing_CS.csv", row.names = F)
+
+```
+
+
+### Descriptive analysis Effort
+
+```{r Effort CS}
+FDI_effort_CS = read.csv("GSA9_CaseStudy/Data/FDI_effort_CS.csv") %>% mutate(quarter = as.character(quarter))
+
+ggplot()+
+  geom_bar(data = FDI_effort_CS, aes(x = vlength, y = tot_fish_day, fill = quarter), stat = "identity", position = "dodge")+
+  theme_minimal()+
+  xlab("")+
+  ylab("Total fishing days")+
+  ggtitle(paste0("FDI Effort_",CS_name,"_",Gear_CS,"_",Year_CS, "\nby vessel length and quarter"))
+
+
+```
+
+### Descriptive analysis Landing
+
+```{r Landing CS, fig.height= 6 , fig.width= 10}
+
+FDI_landing_CS = read.csv("GSA9_CaseStudy/Data/FDI_landing_CS.csv") %>% mutate(quarter = as.character(quarter))
+
+
+land_sum = FDI_landing_CS %>% 
+            group_by(species, vlength, year, quarter) %>% 
+            summarise(kg = sum(tot_fish_weight), euro = sum(tot_fish_value)) %>% 
+            filter(kg > 0) %>% 
+            mutate(log_kg = log(kg+1), tons = kg/1000)
+            
+land_sum %>%  
+   group_by(species) %>% 
+   summarise(kg_tot = sum(kg), euro_tot = sum(euro)) %>% 
+            mutate(log_kg = log(kg_tot+1), log_euro = log(euro_tot+1)) %>% 
+  ggplot() +
+  geom_bar(aes(x = reorder(species, -log_kg), y = log_kg),stat = "identity", position = "dodge") +
+  # facet_wrap(~ quarter)+
+  labs(title = "Species (kg)", x = "Species", y = "log (Kg)") +
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+
+FAO_sp = read.xlsx("CS Data Input/ASFIS_sp_2019.xlsx")[,c("3A_CODE","Scientific_name")] %>% rename("species" = "3A_CODE")
+
+land_sum %>%  
+   group_by(quarter,species) %>% 
+   summarise(kg_tot = sum(kg), euro_tot = sum(euro)) %>% 
+   mutate(kg_prop = kg_tot/sum(kg_tot)*100, euro_prop = euro_tot/sum(euro_tot)*100) %>% 
+  filter(kg_prop > 1) %>% 
+  left_join(FAO_sp) %>% 
+
+  ggplot() +
+  geom_bar(aes(x = reorder(Scientific_name, -kg_prop), y = kg_prop, fill = Scientific_name),stat = "identity", position = "dodge") +
+  facet_wrap(~ quarter, nrow = 4)+
+  labs(title = "Landings by quarter (>1%)", x = "Quarter", y = "kg") +
+  theme_light()+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+```
+
+## Step 2 - Join Landing and Effort
+
+```{r, message=FALSE, warning=FALSE}
+FAO_sp = read.xlsx("CS Data Input/ASFIS_sp_2019.xlsx")[,c("3A_CODE","Scientific_name")] %>% rename("species" = "3A_CODE")
+
+
+
+FDI_CS_data = left_join(FDI_landing_CS, FDI_effort_CS)
+
+
+```
+
+### Descriptive analysis Landing - Effort - LPUE
+
+```{r LPUE , fig.height= 6, fig.width= 10}
+
+FDI_CS_data$LPUE = FDI_CS_data$tot_fish_weight/FDI_CS_data$tot_fish_day
+
+FDI_tot = FDI_CS_data %>%
+  group_by(quarter, species) %>%
+  summarise(LPUE_tot = sum(LPUE)) %>% 
+  mutate(species_ordered = reorder_within(species, -LPUE_tot, quarter))
+  
+  
+palette <- colorRampPalette(brewer.pal(12, "Paired"))(length(unique(FDI_tot$species)))
+names(palette) <- unique(FDI_tot$species)
+  
+ggplot(data = FDI_tot) +
+  geom_bar(aes(x = species_ordered, y = LPUE_tot, fill = species), stat = "identity", position = "dodge") +
+   scale_x_reordered() +
+   scale_fill_manual(values = palette) + 
+  facet_wrap(~ quarter, scales = "free_x", ncol = 1) +
+  labs(title = "LPUE by quarter", x = "Species", y = "LPUE") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+# write.csv(FDI_CS_data, "GSA9_CaseStudy/Data/FDI_CS_data.csv")
+
+```
+
+## Step 3 - Open and subset AER data
+
+```{r AER data}
+AER_FS = read.xlsx("C:/Users/User/OneDrive - CNR/Documenti - SURIMI-Internal-grp/WP2/AER and FDI datasets (October 24)/STECF 23-07 - EU Fleet Economic and Transversal data/STECF 23 07 - EU Fleet Economic and Transversal data_fleet segment.xlsx", sheet = 2) %>% 
+           filter(year %in% Year_CS & fishing_tech %in% c("DTS") & country_code %in% Country_CS) 
+
+write.csv(AER_FS, "GSA9_CaseStudy/Data/Economic_data.csv", row.names = F)
+
+```
+
+### Descriptive analysis AER data
+
+```{r AER summary, message=FALSE, warning=FALSE,  fig.height= 6, fig.width= 10}
+
+AER_CS = read.csv("GSA9_CaseStudy/Data/Economic_data.csv")
+
+AER_CS = AER_CS %>%  
+          rename(vlength = vessel_length) %>% 
+          select(c(country_code, year, fishing_tech, vlength, variable_group, variable_name, variable_code, value, unit ))
+
+data_sum = AER_CS %>% 
+            group_by(country_code, fishing_tech,vlength, variable_group, variable_name, unit) %>% 
+            summarise(val = sum(value,na.rm = T)) %>% 
+            rename(gear = fishing_tech)
+
+ data_sum %>% 
+   group_by(variable_group, variable_name) %>% 
+   mutate(val_prop = val/sum(val)*100) %>% 
+   ggplot()+
+   geom_bar(aes(y = variable_name, x= val_prop, fill = vlength), stat = "identity")+
+   facet_wrap(~ variable_group, scales = "free")+ 
+   scale_fill_brewer(palette = "Set1")+
+   xlab("")+
+   ylab("")+
+   facet_wrap(~ gear)+
+   theme_classic()
+ 
+ AER_wide = AER_CS %>% 
+            select(-c(variable_code, unit, variable_group)) %>% 
+            dcast(...~ variable_name, value.var = "value")
+
+ 
+```
+
+## Step 4 - Join AER with - FDI Effort-Landing  
+
+```{r AER -Join FDI , message=FALSE,warning=FALSE}
+
+FDI_CS_data = read.csv("GSA9_CaseStudy/Data/FDI_CS_data.csv")
+AER_CS = read.csv("GSA9_CaseStudy/Data/Economic_data.csv") %>% rename(vlength = vessel_length)
+
+
+FDI_sub = unique(FDI_CS_data[,c("year","quarter", "vlength", "id", "tot_fish_day" )])
+AER_sub = AER_wide[,c("year", "vlength", "Fishing days", "Days at sea")]
+
+# AER_FDI_effort = left_join(FDI_sub, AER_sub)
+
+
+```
+
+
+## Step 5 - Find vessels track by Global Fishing Watch (GFW)
+
+### Extrapolate data
+
+In this step, we will identify all vessels present in the CS area in a defined moment (here, we use the year 2021 as an example).
+The vessels were extrapolated from the GFW dataset, which uses AIS data to identify vessel tracks, fishing areas, and zones of navigation.
+Furthermore, it has the capacity to identify the ports visited by individual vessels.
+For more datails see <https://globalfishingwatch.org/>
+
+
+The use of gfwr requires a GFW API token, which users can request from the GFW API Portal. 
+Save this token to your .Renviron file using usethis::edit_r_environ() and adding a variable named GFW_TOKEN to the file (GFW_TOKEN="PASTE_YOUR_TOKEN_HERE"). Save the .Renviron file and restart the R session to make the edit effective.
+
+gfwr functions are set to use key = gfw_auth() by default so in general you shouldn’t need to refer to the key in your function calls.
+
+```{r}
+key = gfw_auth() 
+
+```
+
+
+```{r global fishing watch data, eval=FALSE}
+
+
+CS_polygon <- sf::st_bbox(c(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+  crs = 4326) |>
+  sf::st_as_sfc() |>
+  sf::st_as_sf()
+
+ggplot()+
+ 
+  geom_sf(data = CS_polygon)+
+   geom_sf(data = world)+
+  coord_sf(xlim = c(xmin, xmax), ylim = c(ymin, ymax))
+
+
+
+ggplot()+
+  geom_sf(data = CS_polygon)
+
+
+GFW_effort = get_raster(spatial_resolution = 'LOW',
+                 temporal_resolution = 'MONTHLY',
+                 group_by = 'VESSEL_ID',
+                 start_date = "2021-01-01",
+                 end_date = "2021-12-31",
+                 region = CS_polygon,
+                 region_source = 'USER_SHAPEFILE',
+                 key = key)
+
+colnames(GFW_effort) = make.names(colnames(GFW_effort))
+
+GFW_effort %>% 
+  group_by(Flag,Gear.Type) %>% 
+  summarise(h = sum(Apparent.Fishing.Hours)) %>% 
+  ggplot()+
+  geom_bar(aes(x = h, y = reorder(Gear.Type, h), fill = Flag), stat = "identity")+
+  ggtitle("GFW data from CS polygon")+
+  xlab("Fishing hours")+
+  ylab("Gear type")+
+  theme_light()
+
+# write.csv(GFW_effort, "GSA9_CaseStudy/Data/GFW_effort_tot_CS.csv")
+
+```
+
+### Subset by Country, Gear, and CS Area
+
+First of all, we note that sometimes an MMSI is associated with several vessel IDs, so we decide to take only the vessel ID that has a maximum value of Fishing Hours x MMSI
+
+```{r event GFW, eval=FALSE}
+FDI_effort_CS_sf = read_sf("GSA9_CaseStudy/Data/FDI_effort_CS.shp")
+GFW_effort = read.csv("GSA9_CaseStudy/Data/GFW_effort_tot_CS.csv")
+
+GFW_effort_CS_sf = GFW_effort %>%
+                     filter(Flag == "ITA" & Gear.Type %in% c("TRAWLERS")) %>% 
+                     st_as_sf(coords = c("Lon", "Lat"), crs = 4326) 
+
+GFW_effort_CS_sf$month = as.integer(substr(GFW_effort_CS_sf$Time.Range, 6,7))
+GFW_effort_CS_sf$quarter = as.character(c(1,2,3,4)[findInterval(GFW_effort_CS_sf$month, c(1,3,6,9,13))])
+
+
+top_vessel_by_fishing <- GFW_effort_CS_sf %>%
+  group_by(MMSI, Vessel.ID) %>%
+  summarise(total_fishing_hour = sum(Apparent.Fishing.Hours, na.rm = TRUE), .groups = "drop") %>%
+  group_by(MMSI) %>%
+  slice_max(total_fishing_hour, n = 1, with_ties = FALSE)
+
+
+```
+
+
+```{r}
+ 
+FDI_effort_CS_sf_by_quarter = FDI_effort_CS_sf %>%
+                      group_by(quarter,icesnam, ger_typ) %>%
+                      summarise(FDI_tot_fish_day_by_ICES = sum(ttfshdy))
+
+quarter = c("1","2","3","4")
+
+GFW_effort_CS_sf_grid <- NULL  
+for(i in 1:length(quarter)) {
+  a <- st_join(
+    GFW_effort_CS_sf[which(GFW_effort_CS_sf$quarter %in% quarter[i]), ],
+    FDI_effort_CS_sf_by_quarter[which(FDI_effort_CS_sf_by_quarter$quarter %in% quarter[i]), "icesnam"],
+    left = T
+  )
+
+  GFW_effort_CS_sf_grid <- rbind(GFW_effort_CS_sf_grid, a)
+}
+  
+GFW_effort_CS_sf_grid = GFW_effort_CS_sf_grid %>% 
+                        filter(!is.na(icesnam)) %>% 
+                        rename(id = icesnam) 
+
+
+write_sf(GFW_effort_CS_sf_grid, "GSA9_CaseStudy/Data/GFW_effort_CS_sf_grid.shp")
+write.csv(
+  st_drop_geometry(GFW_effort_CS_sf_grid), "GSA9_CaseStudy/Data/GFW_effort_CS_sf_grid.csv", row.names = F)
+
+```
+
+
+
+
+## Step 6 - Find port visited by Global Fishing Watch (GFW)
+
+### Download port visited by GFW database Only for CS vessels
+
+
+```{r port, eval=FALSE}
+
+vID = unique(GFW_effort_CS_sf_grid$Vessel.ID)
+
+
+
+# Initialize port_FV with correct column types
+port_FV <- data.frame(
+  port = character(), 
+  lat = numeric(), 
+  lon = numeric(), 
+  vessel_name = character(),
+  MMSI = character(),
+  month = character(),
+  stringsAsFactors = FALSE
+)
+
+for (i in 1:length(vID)) {
+  
+  port_event <- get_event(
+    event_type   = 'PORT_VISIT',
+    start_date   = "2021-01-01",
+    end_date     = "2021-12-31",
+    region       = test_polygon,
+    vessels      = vID[i],
+    region_source= 'USER_SHAPEFILE',
+    key          = key
+  )
+  
+  if (is.null(port_event)) next
+  
+  for (j in 1:nrow(port_event)) {
+    
+    # Extract values safely, replacing NULL with NA
+    port_name <- port_event$event_info[[j]]$startAnchorage$name
+    lat <- port_event$event_info[[j]]$startAnchorage$lat
+    lon <- port_event$event_info[[j]]$startAnchorage$lon
+    vessel_name <- port_event$vessel_name
+    MMSI <- port_event$vessel_ssvid
+    month <- as.character(month(port_event$start))
+    
+
+    # Create the data frame with NULL-safe values
+    port_event_df <- data.frame(
+      port = ifelse(length(port_name) == 0, NA, port_name),
+      lat = ifelse(length(lat) == 0, NA, lat),
+      lon = ifelse(length(lon) == 0, NA, lon),
+      vessel_name = ifelse(length(vessel_name) == 0, NA, vessel_name),
+      MMSI = ifelse(length(MMSI) == 0, NA, MMSI),
+      month = ifelse(length(month) == 0, NA, month),
+
+      stringsAsFactors = FALSE
+    )
+    
+    # Append the row to the result dataframe
+    port_FV <- bind_rows(port_FV, port_event_df)
+  }
+}
+
+# Remove duplicates and drop rows with NA values
+port_CS_OTB <- port_FV %>% 
+  unique() %>% 
+  drop_na() %>% 
+  mutate(quarter = case_when(
+          month %in% c("1", "2", "3") ~ "1",
+          month %in% c("4", "5", "6") ~ "2",
+          month %in% c("7", "8", "9") ~ "3",
+          month %in% c("10", "11", "12") ~ "4"  )) %>% 
+  group_by(port, vessel_name, MMSI, quarter) %>% 
+  summarise(lat = mean(lat), lon = mean(lon))
+
+
+
+write.xlsx(port_CS_OTB, "GSA9_CaseStudy/Data/port_CS_OTB_GFW.xlsx")
+
+```
+
+### Descriptive analysis
+
+Dal Barplot si vede che è inutile tenere il quarter, quindi bisogna aggregare per porto-barca scegliendo per una barca un singolo porto
+```{r port plot - union with fleet register, echo=TRUE, fig.height=9, fig.width=8, message=FALSE, warning=FALSE}
+
+GFW_port_CS = read.xlsx("GSA9_CaseStudy/Data/GFW_port_CS.xlsx")
+
+GFW_port_CS %>% 
+  group_by(port, quarter) %>%
+  summarise(
+    lon = mean(lon, na.rm = TRUE),
+    lat = mean(lat, na.rm = TRUE),
+    nvessel = n()) %>% 
+  # mutate( prop = 100* nvessel/max(nvessel)) %>%
+     # filter(prop >= 10) %>% 
+  ggplot()+
+  geom_bar(aes(y = reorder(port,nvessel) , x = nvessel), stat = "identity")+
+  facet_wrap(~ quarter)+
+  # geom_vline(xintercept = 10, color = "red")+
+  theme_light()+
+  ggtitle("Harbour by number of vessels")+
+  xlab("Proportion of number of vessels")+
+  ylab("")
+
+
+```
+
+### Open Fleet Register and Add Vessel length (LOA) by MMSI - Vessel name
+Take in effort only MMSI of the fleet register:
+we take only vessel present also in the Fleet Register dataset and we add Vessel length
+
+```{r}
+
+
+fleetReg = read.csv(paste0(wd,"vesselRegistryListResults.csv"), sep = ";")
+
+fleetReg[fleetReg$Main.fishing.gear %in% c("TBN","OTS", "TBS", "OT"), "Main.fishing.gear"] <- "OTB"
+fleetReg[fleetReg$Main.fishing.gear %in% c("SV","SX"), "Main.fishing.gear"] <- "SDN"
+fleetReg[fleetReg$Main.fishing.gear %in% c("DRM", "DRH") , "Main.fishing.gear"] <- "DRB"
+fleetReg[fleetReg$Main.fishing.gear %in% c("GTN","GNC", "GN", "FIX"), "Main.fishing.gear"] <- "GNS"
+fleetReg[fleetReg$Main.fishing.gear %in% "SPR", "Main.fishing.gear"] <- "SSC"
+fleetReg[fleetReg$Main.fishing.gear %in% c("SB", "NK"), "Main.fishing.gear"] <- "MIS"
+fleetReg[fleetReg$Main.fishing.gear %in% c("LL", "LX"), "Main.fishing.gear"] <- "LLS"
+
+
+fleetReg_info = fleetReg %>% 
+                 rename(vessel_name = "Name.of.vessel", Gear = "Main.fishing.gear", Country ="Country.of.Registration") %>% 
+                  mutate(MMSI = as.character(MMSI)) %>% 
+                  filter(Country %in% Country_CS) %>% 
+                  filter(Gear %in% Gear_CS) 
+
+
+fleetReg_info$vlength = c("VL0006","VL0612","VL1218", "VL1824", "VL2440", "VL40XX" )[findInterval(fleetReg_info$LOA, c(0,06,12,18,24,40, 100))]
+
+write.csv(fleetReg_info, "GSA9_CaseStudy/Data/FleetReg_info_CS.csv", row.names = F)
+
+GFW_port_CS_fReg = GFW_port_CS %>% filter(MMSI %in% fleetReg_info$MMSI)
+GFW_effort_CS_sf_grid_fReg = read.csv("GSA9_CaseStudy/Data/GFW_effort_CS_sf_grid.csv") %>% 
+                              mutate(MMSI = as.character(MMSI)) %>% 
+                              filter(MMSI %in% unique(fleetReg_info$MMSI))
+
+
+write.csv(GFW_effort_CS_sf_grid_fReg, "GSA9_CaseStudy/Data/GFW_effort_CS_sf_grid_fReg.csv")
+```
+
+
+###Check for main port
+
+We filtered for main port resulted fro the: Main Ports (Vessels Traffic by Type 1997-2024)
+The dataset on maritime transport of goods, passengers and vessels in the European main ports was created in 2014 by Eurofish and Cogea for the European Marine Observation and Data Network (EMODnet). It is available for viewing and download on EMODnet web portal (Human Activities, https://emodnet.ec.europa.eu/en/human-activities). The dataset is the result of the harmonization and aggregation on annual basis of the quarterly Eurostat Maritime transport data, provided by port in the EU Member States, Montenegro, Norway, Turkey and the UK. Eurostat data have been related to the 'Ports 2013' EUROSTAT GISCO's points georeferenced dataset, when available, or to the ports locations coming from other sources, such as UN/LOCODE, Lloyd’s List, Marine Traffic, VESSEL TRACKER and ports' authorities. Goods traffic data are reported in thousands of tonnes by year, type of cargo and direction. Passengers traffic data are reported in thousands passengers (excluding cruise passengers) by direction and traffic type. Vessels traffic data are reported in unit and gross tonnage (thousands) of vessels by vessel size class and vessel type. Where available, the latest update includes data from the 1997 up to the 2024
+
+Since the two datasets are not perfectly comparable, we first identify all the GFW ports that are also present in the EMODNET dataset by performing a join on the port name.
+Then, a buffer of 3 km is created around the EMODNET ports, and the GFW ports within that buffer are assigned the same name as the EMODNET ports.
+
+
+```{r}
+GFW_port_CS_fReg = read.csv("GSA9_CaseStudy/Data/GFW_port_CS_fReg.csv")
+
+EMODNET_port_sf = read_sf("CS Data Input/EMODnet_HA_MainPorts_Traffic_20241112/EMODnet_HA_MainPorts_Ports2025_20241112.shp") %>% 
+  filter(CNTR_CODE %in% Country_code) %>% 
+  st_intersection(CS_polygon)
+
+
+GFW_port_CS = GFW_port_CS_fReg 
+                #       %>% 
+                # group_by(port) %>%
+                # summarise(
+                #   lon = mean(lon, na.rm = TRUE),
+                #   lat = mean(lat, na.rm = TRUE),
+                #   nvessel = n())
+
+GFW_port_sf = GFW_port_CS %>% st_as_sf(coords = c("lon","lat"), crs = st_crs(EMODNET_port_sf))
+
+EMODNET_port_sf$PORT_NAME = toupper(EMODNET_port_sf$PORT_NAME)
+
+Emo_port = EMODNET_port_sf$PORT_NAME
+GFW_port = unique(GFW_port_sf$port)
+
+# Generate plot
+v <- venn.diagram(list(Emo_port = Emo_port, GFW_port = GFW_port),
+                  fill = c("orange", "blue"),
+                  alpha = c(0.5, 0.5), cat.cex = 1.5, cex=1.5,
+                  filename=NULL)
+
+lapply(v, function(i) i$label)
+
+# Over-write labels (5 to 7 chosen by manual check of labels)
+
+v[[5]]$label  <- paste(setdiff(GFW_port, Emo_port), collapse="\n")  
+# in baa only
+v[[6]]$label <- paste(setdiff(Emo_port, GFW_port)  , collapse="\n")  
+# intesection
+v[[7]]$label <- paste(intersect(Emo_port, GFW_port), collapse="\n")  
+
+# plot  
+grid.draw(v)
+
+
+#### manually change port name in GFW dataset
+
+GFW_port_sf = GFW_port_sf %>% 
+               mutate(port = case_when(
+                  port == "CALA GALERA" ~ "PORTO ERCOLE",
+                  port == "GENOA" ~ "GENOVA",
+                  port == "GIGLIO PORTO" ~ "ISOLA DEL GIGLIO",
+                  port == "PORTO FERRAIO" ~ "PORTOFERRAIO",
+                  TRUE ~ port  # Keep other values unchanged
+                ))
+
+GFW_port = unique(GFW_port_sf$port)
+
+Portdiff = setdiff(Emo_port, GFW_port)
+
+
+
+EMODNET_port_buffer_GFW = EMODNET_port_sf %>% 
+                          filter(PORT_NAME %in% Portdiff) %>% 
+                          st_buffer(dist = 3000) %>% 
+                          st_intersection(GFW_port_sf)
+                          
+EMODNET_port_buffer_GFW              
+###inspect manually 
+
+
+GFW_port_sf = GFW_port_sf %>% 
+                mutate(port = case_when(
+                      port == "ITA-110" ~ "RIO MARINA",
+                      port == "ITA-167" ~ "CAVO",
+                      TRUE ~ port ))
+
+
+Emo_port = EMODNET_port_sf$PORT_NAME
+GFW_port = unique(GFW_port_sf$port)
+
+# Generate plot
+v <- venn.diagram(list(Emo_port = Emo_port, GFW_port = GFW_port),
+                  fill = c("orange", "blue"),
+                  alpha = c(0.5, 0.5), cat.cex = 1.5, cex=1.5,
+                  filename=NULL)
+
+lapply(v, function(i) i$label)
+
+# Over-write labels (5 to 7 chosen by manual check of labels)
+
+v[[5]]$label  <- paste(setdiff(GFW_port, Emo_port), collapse="\n")  
+# in baa only
+v[[6]]$label <- paste(setdiff(Emo_port, GFW_port)  , collapse="\n")  
+# intesection
+v[[7]]$label <- paste(intersect(Emo_port, GFW_port), collapse="\n")  
+
+# plot  
+grid.draw(v)
+# 
+final_port_name = intersect(Emo_port, GFW_port)
+
+xmin = as.numeric(st_bbox(FDI_effort_CS_sf_by_quarter)[1])-0.1
+xmax = as.numeric(st_bbox(FDI_effort_CS_sf_by_quarter)[3])+0.1
+ymin = as.numeric(st_bbox(FDI_effort_CS_sf_by_quarter)[2])-0.1
+ymax = as.numeric(st_bbox(FDI_effort_CS_sf_by_quarter)[4])+0.1
+
+  leaflet() %>%
+  addTiles() %>%
+  fitBounds(lng1 = xmin, lat1 = ymin, lng2 = xmax, lat2 = ymax) %>%
+  
+  # All GFW ports (red)
+  addCircleMarkers(
+    data = GFW_port_sf,
+    radius = 5,
+    color = "red",
+    popup = ~ port
+  ) %>%
+  
+  # Highlighted ports (blue)
+  addCircleMarkers(
+    data = GFW_port_sf[which(GFW_port_sf$port %in% final_port_name),],
+    radius = 5,
+    color = "blue",
+    popup = ~ port
+  ) %>%
+  
+  # Final ports (green)
+  addMarkers(
+    data = EMODNET_port_sf,
+    popup = ~ PORT_NAME
+  )
+
+  
+### Check red points and assign nearest EMODNET port
+  
+  GFW_port_sf = GFW_port_sf %>% 
+              mutate(port = case_when(
+                      port == "ITA-338" ~ "ANZIO",
+                      port == "ITA-206" ~ "CIVITAVECCHIA",
+                      port == "SANTA MARINELLA" ~ "CIVITAVECCHIA",
+                      port == "ITA-368" ~ "CIVITAVECCHIA",
+                      port == "ITA-297" ~ "PORTO ERCOLE",
+                      port == "ITA-115" ~ "PORTOFERRAIO",
+                      port == "MARCIANA MARINA" ~ "PORTOFERRAIO",
+                      port == "MARINA DI SALIVOLI" ~ "PIOMBINO",
+                      port == "PORTOVENERE" ~ "LA SPEZIA",
+                      port == "LAVAGNA" ~ "CHIAVARI",
+                      port == "SESTRI LEVANTE" ~ "CHIAVARI",
+                      port == "CAMOGLI" ~ "PORTOFINO",
+                      port == "ITA-273" ~ "GENOVA",
+                      port == "VARAZZE" ~ "SAVONA",
+                      port == "SAN LORENZO AL MARE" ~ "IMPERIA",
+                      port == "SANTO STEFANO" ~ "IMPERIA",
+                      port == "SANREMO" ~ "IMPERIA",
+                      TRUE ~ port )) 
+                
+  
+  
+  
+  GFW_port = unique(GFW_port_sf$port)
+  final_port_name = intersect(Emo_port, GFW_port)
+  
+  EMODNET_final_port = EMODNET_port_sf %>% select(PORT_NAME) %>% filter(PORT_NAME %in% final_port_name) %>% rename(port = PORT_NAME)
+
+  
+  GFW_port_sf = st_drop_geometry(GFW_port_sf) %>% 
+                left_join(EMODNET_final_port) %>% 
+                st_as_sf()
+ 
+  GFW_port_sf %>% 
+    mutate(n = 1) %>% 
+    group_by(port) %>%
+    summarise(nvessel = sum(n)) %>%
+    ggplot()+
+  geom_bar(aes(y = reorder(port,nvessel) , x = nvessel), stat = "identity")+
+  # geom_vline(xintercept = 10, color = "red")+
+  theme_light()+
+  ggtitle("Harbour by number of vessels")+
+  xlab("Proportion of number of vessels")+
+  ylab("")
+
+
+write_sf(GFW_port_sf, "GSA9_CaseStudy/Data/GFW_port_CS_fReg_coords.shp")  
+write.csv(data.frame(st_coordinates(GFW_port_sf), st_drop_geometry(GFW_port_sf[-1])), row.names = F, "GSA9_CaseStudy/Data/GFW_port_CS_fReg_coords.csv")
+ 
+```
+
+
+
+
+Adesso abbiamo il numero di barche per i porti principali... e dobbiamo collegarli all'effort..
+il problema è che ci perdiamo l'info della singola barca perchè alcune barche sono associate a diversi porti
+
+```{r, eval=FALSE}
+GFW_effort_CS = read.csv("GFW_effort_CS_sf_grid_fReg.csv")
+GFW_effort_CS_sf = read_sf("GFW_effort_CS_sf_grid.shp")
+# APP_F_H: ore apparenti di pescato (fishour not apparent)
+
+GFW_port_CS = read.csv("GFW_port_CS_fReg_coords.csv") # check vlength on the  If vlength is missing, match by MMSI on "FleetReg_info_CS.csv"
+# quarter ignored, just check that quarter-vessel-port doesn't change
+GFW_port_CS_sf = read_sf("GFW_port_CS_fReg_coords.shp")
+
+FDI_effort_CS_sf_by_quarter = read_sf("FDI_effort_CS.shp")       
+# icesnam (ex id), ttfshdy (colonna 16) = giorni di pesca (ex fish hours) #vssln (vlength), #quarter
+
+FDI_landings_CS_sf_by_quarter = read_sf("FDI_landing_CS.shp")       
+# icesnam (ex id), #quarter, #ttwghtl = landing cumulativo per cella per specie. Sommato, deve dare il landing per specie per cella
+# ttvlnd: to check what it is
+
+# economic part (Annual Economic Report)
+econlong <- read.csv("Economic_data.csv",sep=",")
+econwide <- read.csv("Economic_data_wide.csv",sep=",")
+# on the single dataset, to disaggregate by length. Initially average between number of vessel, then the heterogeneity of individual vessel
+# they are all euro, expect energy consumption to mutate
+# number of vessel;
+# COSTS: energy consumption (liter gasoil) and energy costs (euro) >> to check ; Other variable costs; # Other non-variable costs
+# how to estimate the actual consumption cost: cost of gasoil (to find out) / distance length
+# PROFITS: gross value of landing = profits by vlength
+# Economic_data_wide = (gross-product - energy costs) / energy consumption
+
+fleetReg_info = read.csv("FleetReg_info_CS.csv") %>% 
+                select(vessel_name, Place.of.registration.name, MMSI, vlength)
+
+
+GFW_port_fREG = GFW_port_CS
+
+GFW_port_fREG <- GFW_port_fREG %>%
+                  group_by(vessel_name) %>%
+                  mutate(
+                    port_count = n_distinct(port),
+                    match_port = if_else(port_count > 1, Place.of.registration.name, port),
+                    final_port = if_else(is.na(match_port), port, match_port )
+                  ) %>%
+                  mutate(final_port = toupper(final_port)) %>% 
+                  ungroup() %>%
+                  select(-port_count)  # rimuovi colonna ausiliaria se non ti serve
+
+setdiff(unique(GFW_port_fREG$final_port), unique(GFW_port_fREG$port))
+
+ GFW_port_fREG <- GFW_port_fREG %>%
+          mutate(final_port = case_when(
+                      final_port == "ROMA" ~ "FIUMICINO",
+                      TRUE ~ final_port ))
+ 
+ setdiff(unique(GFW_port_fREG$final_port), unique(GFW_port_fREG$port))  
+ 
+ GFW_port_fREG %>% 
+   filter(final_port %in% c("SESTRI LEVANTE" , "SANTA MARGHERITA LIGURE")) %>% 
+   distinct(vessel_name,final_port)
+ 
+  GFW_port_fREG <- GFW_port_fREG %>%
+          mutate(final_port = case_when(
+                      final_port == "SESTRI LEVANTE" & vessel_name == "JAZZ" ~ "CHIAVARI", 
+                      final_port == "SANTA MARGHERITA LIGURE" & vessel_name == "ARDITO" ~ "CHIAVARI",
+                      final_port == "SANTA MARGHERITA LIGURE" & vessel_name == "TERESA MADRE" ~ "CHIAVARI",
+                      TRUE ~ final_port ))
+ 
+  port_coords = unique(GFW_port_fREG[c("X","Y","port")])
+  
+  GFW_port_fREG_CS = GFW_port_fREG %>% 
+                    select(-c(X,Y,port,match_port)) %>% 
+                    rename(port = final_port) %>% 
+                    left_join(port_coords)
+ 
+  write.csv(GFW_port_fREG_CS, "GSA9_CaseStudy/Data/GFW_port_CS_fReg_coords.csv", row.names = F )   
+
+  GFW_port_fREG_sf = st_as_sf(GFW_port_fREG_CS, coords = c("X","Y"), crs = 4326)
+  
+  write_sf(GFW_port_fREG_sf, "GSA9_CaseStudy/Data/GFW_port_CS_fReg_coords.shp")   
+
+`````````
+
+## Assign effort and landings for each port - GFW/FDI
+
+```{r}
+GFW_port_fREG_sf = read_sf("GSA9_CaseStudy/Data/GFW_port_CS_fReg_coords.shp")
+
+GFW_port_fREG_tot_sf = GFW_port_fREG_sf %>% 
+                        group_by(port) %>% 
+                        summarise(vessel_count = n_distinct(vssl_nm))
+  
+
+leaflet() %>%
+  addTiles() %>%
+  fitBounds(lng1 = xmin, lat1 = ymin, lng2 = xmax, lat2 = ymax) %>%
+  # addPolygons(
+  #   data = FDI_effort_CS_sf_by_quarter, opacity = 1,fill = "trasparent"
+  # ) %>%
+  # addCircleMarkers(
+  #   data = GFW_effort_CS_sf %>% filter(Vssl_Nm == "ANASTASIA"),
+  #   radius = 5,
+  #    color = pal(log(GFW_effort_CS_sf$App_F_H)),
+  #   popup = ~ App_F_H
+  # ) %>%
+  addMarkers(
+    data = GFW_port_fREG_tot_sf,
+    popup = ~ paste(port,"-",vessel_count)
+    
+  )
+
+
+GFW_effort_vessel_ICES = GFW_effort_CS %>% 
+                          group_by(id, Vessel.Name, MMSI, quarter) %>% 
+                          summarise(Tot_effort = sum(Apparent.Fishing.Hours))
+  
+  
+GFW_merged <- merge(GFW_effort_vessel_ICES %>% rename(vessel_name = Vessel.Name), GFW_port_CS, by = c("vessel_name","MMSI","quarter"), all.x = TRUE)
+
+```
+
+
+#### Recap
+
+GFW_port_CS_fReg_coords.shp = GFW data of the main port by vessel (with port coordinates)  # GFW_port_fREG_sf
+GFW_effort_CS_sf = GFW data effort by vessel
+FDI_effort_CS_sf = FDI data effort by ICES cell
+FDI_landing_CS_sf = FDI data landing by ICES cell
+
+
+
+###Economic models
+
+Starting from the data collected by NISEA and DISPLACE model, it is possible to fit a series of economic models
+-- SEE : 
+- 10a_GenerateFromSTECFEconomics
+- 10b_GenerateVesselsEconomicsFile
+
+
+
+```{r}
+AER_wide[is.na(AER_wide)] <- 0
+
+AER_wide$Crewshare_and_unpaid_labour_costs_percent =   (AER_wide$`Personnel costs` + AER_wide$`Unpaid labour`) / (AER_wide$`Gross value of landings` + AER_wide$`Operating subsidies`) * 100
+
+AER_wide$Other_variable_costs_per_unit_effort = 
+  AER_wide$other
+```
+
+
+
+
+
+
+
+
+
+```{r fit eco1, eval=FALSE}
+
+write.xlsx(unique(AER_CS[,c("variable_group","variable_name","variable_code")]), file = "CS Data Input/AER_expl.xlsx") 
+
+ # 'Costi operativi' = 'OC',
+ #                       'Costo del carburante'= 'fuel_cost',
+ #                       'Costo del lavoro' = 'LC',
+ #    Investments   = 'Investimenti' = 'INV',
+ #    Gross value of landings=  'Valore delle catture' = 'GVL'
+
+
+gOC = ggplot(data = AER_wide,
+       aes(x = GVL,  y = OC)) +
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  ggtitle("Operative Cost VS \nGross Value of Landing") +
+  theme_test()+
+  theme(plot.title=element_text(size = 8))
+
+lmOC = lm(data = EcoRef, OC ~ GVL -1)
+
+OCfact = as.numeric(coefficients(lmOC))
+
+gINV = ggplot(data = EcoRef,
+       aes(x = GVL,  y = INV)) +
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  ggtitle("Investment VS \nGross Value of Landing") +
+  theme_test()+
+  theme(plot.title=element_text(size = 8))
+
+lmINV = lm(data = EcoRef, INV ~ GVL -1)
+INVfact = as.numeric(coefficients(lmINV))
+
+
+gLC = ggplot(data = EcoRef,
+       aes(x = GVL,  y = LC)) +
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  ggtitle("Labour Cost VS \nGross Value of Landing") +
+  theme_test()+
+  theme(plot.title=element_text(size = 8))
+
+
+lmLC = lm(data = EcoRef, LC ~ GVL -1)
+LCfact = as.numeric(coefficients(lmLC))
+eco_fact_list = list(OCfact = OCfact,
+                     INVfact = INVfact,
+                     LCfact = LCfact)
+grid.arrange(gOC, gINV, gLC, nrow = 1)
+```
+
