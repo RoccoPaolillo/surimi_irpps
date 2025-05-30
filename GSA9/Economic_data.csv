@@ -1,0 +1,181 @@
+"upload_date","country_name","country_code","year","supra_reg","fishing_tech","vessel_length","geo_indicator","cluster_name","fs_name","variable_group","variable_name","variable_code","value","unit","fromtable","framework","template_name","gear","fishery","activity"
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capacity","Number of vessels","totves",4,"number","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capacity","Number of vessels","totves",113,"number","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capacity","Number of vessels","totves",550,"number","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capacity","Number of vessels","totves",171,"number","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capacity","Number of vessels","totves",1022,"number","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capacity","Total vessel power","totkw",5773,"kW","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capacity","Total vessel power","totkw",9328.15,"kW","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capacity","Total vessel power","totkw",150745.37,"kW","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capacity","Total vessel power","totkw",74167.17,"kW","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capacity","Total vessel power","totkw",148576.61,"kW","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capacity","Total vessel tonnage","totgt",2106,"GT","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capacity","Total vessel tonnage","totgt",727,"GT","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capacity","Total vessel tonnage","totgt",32679,"GT","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capacity","Total vessel tonnage","totgt",22890,"GT","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capacity","Total vessel tonnage","totgt",20011,"GT","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capacity","Mean LOA of vessels","avgloa",46.33,"metre","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capacity","Mean LOA of vessels","avgloa",10.82,"metre","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capacity","Mean LOA of vessels","avgloa",20.64,"metre","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capacity","Mean LOA of vessels","avgloa",27.28,"metre","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capacity","Mean LOA of vessels","avgloa",14.45,"metre","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capacity","Mean age of vessels","avgage",27.25,"year","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capacity","Mean age of vessels","avgage",38.47,"year","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capacity","Mean age of vessels","avgage",34.3,"year","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capacity","Mean age of vessels","avgage",29.75,"year","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capacity","Mean age of vessels","avgage",30.75,"year","map_fs","map","map_capacity",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","Fishing days","totfishdays",639,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","Fishing days","totfishdays",11860,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","Fishing days","totfishdays",82788,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","Fishing days","totfishdays",26965,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","Fishing days","totfishdays",129944,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","Days at sea","totseadays",639,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","Days at sea","totseadays",11692,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","Days at sea","totseadays",82788,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","Days at sea","totseadays",26984,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","Days at sea","totseadays",129944,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","kW fishing days","totkwfishdays",912260.5,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","kW fishing days","totkwfishdays",963446.26,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","kW fishing days","totkwfishdays",22566018.99,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","kW fishing days","totkwfishdays",11670624.45,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","kW fishing days","totkwfishdays",18916041,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","GT fishing days","totgtfishdays",349099,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","GT fishing days","totgtfishdays",77831.72,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","GT fishing days","totgtfishdays",4876264.79,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","GT fishing days","totgtfishdays",3620562.78,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","GT fishing days","totgtfishdays",2528641.44,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","Maximum days at sea","maxseadays",257,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","Maximum days at sea","maxseadays",221,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","Maximum days at sea","maxseadays",235,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","Maximum days at sea","maxseadays",221,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","Maximum days at sea","maxseadays",209,"day","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","Number of fishing trips","tottrips",34,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","Number of fishing trips","tottrips",10959,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","Number of fishing trips","tottrips",63551,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","Number of fishing trips","tottrips",11183,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","Number of fishing trips","tottrips",111480,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","Energy consumption","totenercons",NA,"litre","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","Energy consumption","totenercons",1837004.7964,"litre","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","Energy consumption","totenercons",75684282.6009,"litre","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","Energy consumption","totenercons",39367754.5251,"litre","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","Energy consumption","totenercons",56162884.6776,"litre","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capital","Total assets","assets",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capital","Total assets","assets",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capital","Total assets","assets",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capital","Total assets","assets",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capital","Total assets","assets",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capital","Gross debt","debts",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capital","Gross debt","debts",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capital","Gross debt","debts",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capital","Gross debt","debts",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capital","Gross debt","debts",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capital","Investments","totinvest",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capital","Investments","totinvest",112716.518,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capital","Investments","totinvest",2119525.1538,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capital","Investments","totinvest",1427801.8422,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capital","Investments","totinvest",3598069.2909,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capital","Value of physical capital","totdeprep",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capital","Value of physical capital","totdeprep",3613849.3302,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capital","Value of physical capital","totdeprep",105673083.255,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capital","Value of physical capital","totdeprep",82798290.3399,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capital","Value of physical capital","totdeprep",61721247.0185,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capital","Value of quota and other fishing rights","totrights",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capital","Value of quota and other fishing rights","totrights",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capital","Value of quota and other fishing rights","totrights",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capital","Value of quota and other fishing rights","totrights",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capital","Value of quota and other fishing rights","totrights",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Expenditure","Consumption of fixed capital","totdepcost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Expenditure","Consumption of fixed capital","totdepcost",994802.1892,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Expenditure","Consumption of fixed capital","totdepcost",28472086.0521,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Expenditure","Consumption of fixed capital","totdepcost",21984199.3961,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Expenditure","Consumption of fixed capital","totdepcost",16066411.8559,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Expenditure","Other variable costs","totvarcost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Expenditure","Other variable costs","totvarcost",455953.6508,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Expenditure","Other variable costs","totvarcost",9214281.7433,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Expenditure","Other variable costs","totvarcost",4889003.7067,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Expenditure","Other variable costs","totvarcost",7747903.7431,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Expenditure","Other non-variable costs","totnovarcost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Expenditure","Other non-variable costs","totnovarcost",184188.0629,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Expenditure","Other non-variable costs","totnovarcost",4263919.411,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Expenditure","Other non-variable costs","totnovarcost",3144146.6164,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Expenditure","Other non-variable costs","totnovarcost",4479156.6989,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Expenditure","Lease/rental payments for quota","totrightscost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Expenditure","Lease/rental payments for quota","totrightscost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Expenditure","Lease/rental payments for quota","totrightscost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Expenditure","Lease/rental payments for quota","totrightscost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Expenditure","Lease/rental payments for quota","totrightscost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Expenditure","Repair & maintenance costs","totrepcost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Expenditure","Repair & maintenance costs","totrepcost",443018.2492,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Expenditure","Repair & maintenance costs","totrepcost",5839549.576,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Expenditure","Repair & maintenance costs","totrepcost",3576608.2909,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Expenditure","Repair & maintenance costs","totrepcost",7282189.0624,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Expenditure","Energy costs","totenercost",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Expenditure","Energy costs","totenercost",1297419.3257,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Expenditure","Energy costs","totenercost",42645304.0669,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Expenditure","Energy costs","totenercost",22708422.1883,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Expenditure","Energy costs","totenercost",35956982.1353,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Expenditure","Personnel costs","totcrewwage",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Expenditure","Personnel costs","totcrewwage",1078544.2108,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Expenditure","Personnel costs","totcrewwage",30788347.6519,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Expenditure","Personnel costs","totcrewwage",18410961.8977,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Expenditure","Personnel costs","totcrewwage",24838552.379,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Expenditure","Value of unpaid labour","totunpaidlab",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Expenditure","Value of unpaid labour","totunpaidlab",302079.3784,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Expenditure","Value of unpaid labour","totunpaidlab",2024621.9032,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Expenditure","Value of unpaid labour","totunpaidlab",416463.659,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Expenditure","Value of unpaid labour","totunpaidlab",2126494.7986,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Capital","Subsidies on investments","subinvest",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Capital","Subsidies on investments","subinvest",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Capital","Subsidies on investments","subinvest",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Capital","Subsidies on investments","subinvest",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Capital","Subsidies on investments","subinvest",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Income","Operating subsidies","totdirsub",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Income","Operating subsidies","totdirsub",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Income","Operating subsidies","totdirsub",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Income","Operating subsidies","totdirsub",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Income","Operating subsidies","totdirsub",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Income","Gross value of landings","totlandginc",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Income","Gross value of landings","totlandginc",4623287.9975,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Income","Gross value of landings","totlandginc",125966616.6001,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Income","Gross value of landings","totlandginc",75348160.2066,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Income","Gross value of landings","totlandginc",107017931.805,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Income","Income from leasing out quota","totrightsinc",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Income","Income from leasing out quota","totrightsinc",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Income","Income from leasing out quota","totrightsinc",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Income","Income from leasing out quota","totrightsinc",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Income","Income from leasing out quota","totrightsinc",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Income","Other income","tototherinc",NA,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Income","Other income","tototherinc",38473.4172,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Income","Other income","tototherinc",377782.7989,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Income","Other income","tototherinc",2267516.9483,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Income","Other income","tototherinc",4538617.4297,"euro","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Employment","Engaged crew","totjob",NA,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Employment","Engaged crew","totjob",262.4017,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Employment","Engaged crew","totjob",2038.2008,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Employment","Engaged crew","totjob",997.2053,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Employment","Engaged crew","totjob",2725.3856,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Employment","Total hours worked per year (engaged crew)","hrworked",NA,"hour","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Employment","Total hours worked per year (engaged crew)","hrworked",321787.3825,"hour","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Employment","Total hours worked per year (engaged crew)","hrworked",4324701.1181,"hour","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Employment","Total hours worked per year (engaged crew)","hrworked",3253629.8072,"hour","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Employment","Total hours worked per year (engaged crew)","hrworked",4239842.4668,"hour","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Employment","Unpaid labour","unpaidemp",NA,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Employment","Unpaid labour","unpaidemp",56.741,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Employment","Unpaid labour","unpaidemp",92.1548,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Employment","Unpaid labour","unpaidemp",21.7223,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Employment","Unpaid labour","unpaidemp",129.2688,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Employment","FTE national","totnatfte",NA,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Employment","FTE national","totnatfte",196.0913,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Employment","FTE national","totnatfte",1987.3676,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Employment","FTE national","totnatfte",974.7012,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Employment","FTE national","totnatfte",2543.4291,"number","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","kW days at sea","kwseadays",NA,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","kW days at sea","kwseadays",NA,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","kW days at sea","kwseadays",NA,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","kW days at sea","kwseadays",NA,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","kW days at sea","kwseadays",NA,"kWday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"OFR","DTS","VL40XX","IWE",NA,"ITA OFR DTS40XX IWE","Effort","GT days at sea","gtseadays",349099,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL0612","NGI",NA,"ITA MBS DTS0612 NGI","Effort","GT days at sea","gtseadays",76882.05,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1824","NGI",NA,"ITA MBS DTS1824 NGI","Effort","GT days at sea","gtseadays",4876264.79,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL2440","NGI",NA,"ITA MBS DTS2440 NGI","Effort","GT days at sea","gtseadays",3623507.78,"GTday","map_fs","map","map_fs",NA,NA,NA
+45012,"Italy","ITA",2021,"MBS","DTS","VL1218","NGI",NA,"ITA MBS DTS1218 NGI","Effort","GT days at sea","gtseadays",2528641.44,"GTday","map_fs","map","map_fs",NA,NA,NA
