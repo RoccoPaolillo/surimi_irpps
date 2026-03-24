@@ -98,7 +98,6 @@ global {
                 list<int> ids <- lookup[this_month];
                 if (!empty(ids)) {
                     self.current_id_grid <- first(ids);
-                    
                     // Move the vessel to the cell location
                     cell target_cell <- cell first_with (int(each.id) = self.current_id_grid);
                     if (target_cell != nil) {
@@ -107,7 +106,13 @@ global {
                 }
             }
         }
-        current_month_index <- (current_month_index + 1) mod length(months);
+// stop after December
+    if (current_month_index = length(months) - 1) {
+        write "End of year reached";
+        do pause;
+    } else {
+        current_month_index <- current_month_index + 1;
+    }
     }
 }
 
