@@ -6,8 +6,8 @@
 model surimi5km
 
 global {
-//    file shape_file_grid <- shape_file("../includes/smart5km/grid5km.shp");
-    file shape_sub_grid  <- shape_file("../includes/smart5km/sub_shape5km.shp");
+    file shape_file_grid <- shape_file("../includes/smart5km/grid5km.shp");
+    file shape_sub_grid  <- shape_file("../includes/smart5km/sub_shape5km_new.shp");
     
     // Correct Map Initialization
     map<string, map<string, list<int>>> id_grids_by_vessel <- [];
@@ -17,14 +17,14 @@ global {
         "July","August","September","October","November","December"
     ];
     int current_month_index <- 0;
-    geometry shape <- envelope(shape_sub_grid);
+    geometry shape <- envelope(shape_file_grid);
     int day_in_current_month <- 1;
 
     init {
     // 1. Load Grid
- //   create cell from: shape_sub_grid with: [
- //       id :: string(read("id"))
- //   ];
+  create cell from: shape_file_grid with: [
+       id :: string(read("id"))
+    ];
 
     // 2. Load Sub-Grid Data
     create sub_grid from: shape_sub_grid with: [
@@ -40,16 +40,16 @@ global {
     
     list<int> unique_ids <- remove_duplicates(sub_grid collect each.id_grid);
 
-loop cid over: unique_ids {
-    create cell {
-        id <- string(cid);
-        list<sub_grid> matching_subs <- sub_grid where (each.id_grid = cid);
-        if !empty(matching_subs) {
-            shape <- union(matching_subs collect each.shape);
-            location <- shape.location;
-        }
-    }
-}
+// loop cid over: unique_ids {
+ //    create cell {
+ //        id <- string(cid);
+ //        list<sub_grid> matching_subs <- sub_grid where (each.id_grid = cid);
+ //        if !empty(matching_subs) {
+  //           shape <- union(matching_subs collect each.shape);
+ //            location <- shape.location;
+ //        }
+ //    }
+// }
 
     // 3. Create Harbours
     list<string> unique_harbours <- remove_duplicates(sub_grid collect each.harbour_name);
