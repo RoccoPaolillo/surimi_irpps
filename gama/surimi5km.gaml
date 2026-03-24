@@ -11,13 +11,14 @@ global {
     
     // Correct Map Initialization
     map<string, map<string, list<int>>> id_grids_by_vessel <- [];
-    
+     
     list<string> months <- [
         "January","February","March","April","May","June",
         "July","August","September","October","November","December"
     ];
     int current_month_index <- 0;
     geometry shape <- envelope(shape_sub_grid);
+    int day_in_current_month <- 1;
 
     init {
     // 1. Load Grid
@@ -33,7 +34,8 @@ global {
         vessel_gear        :: string(read("Gear")),
         vessel_origharbour :: string(read("harbour")),
         id_grid            :: int(read("id")),
-        MONTH              :: string(read("MONTH"))
+        MONTH              :: string(read("MONTH")),
+        fishday            :: int(read("fishday"))
     ];
     
     list<int> unique_ids <- remove_duplicates(sub_grid collect each.id_grid);
@@ -107,15 +109,24 @@ ask vessel {
         if (!empty(ids)) {
             current_id_grid <- ids;
             current_grid_index <- 0;
+            day_in_month <- 0;
+
+            list<sub_grid> my_month_data <- sub_grid where ((each.vessel_name = name) and (each.MONTH = this_month));
+            if !empty(my_month_data) {
+                current_fishday <- first(my_month_data).fishday;
+            } else {
+                current_fishday <- 0;
+            }
         }
     }
 }
+
 }
 
 
 reflex move_vessels_daily {
     ask vessel {
-        if (!empty(current_id_grid)) {
+        if (!empty(current_id_grid) and (day_in_month < current_fishday)) {
             int next_id <- current_id_grid[current_grid_index];
 
             cell target_cell <- cell first_with (int(each.id) = next_id);
@@ -143,13 +154,26 @@ reflex update_monthly_data when: (cycle > 0) and (cycle mod 30 = 0) {
             if (!empty(ids)) {
                 current_id_grid <- ids;
                 current_grid_index <- 0;
+                day_in_month <- 0;
+
+                list<sub_grid> my_month_data <- sub_grid where ((each.vessel_name = name) and (each.MONTH = this_month));
+                if !empty(my_month_data) {
+                    current_fishday <- first(my_month_data).fishday;
+                } else {
+                    current_fishday <- 0;
+                }
+
             } else {
                 current_id_grid <- [];
                 current_grid_index <- 0;
+                current_fishday <- 0;
+                day_in_month <- 0;
             }
         } else {
             current_id_grid <- [];
             current_grid_index <- 0;
+            current_fishday <- 0;
+            day_in_month <- 0;
         }
     }
 
@@ -170,8 +194,14 @@ species cell {
 }
 
 species sub_grid {
-    string harbour_name; string vessel_name; string vessel_length;
-    string vessel_gear; string vessel_origharbour; int id_grid; string MONTH;
+    string harbour_name; 
+    string vessel_name; 
+    string vessel_length;
+    string vessel_gear; 
+    string vessel_origharbour; 
+    int id_grid; 
+    string MONTH;
+    int fishday;
 }
 
 species harbour {
@@ -189,6 +219,8 @@ species vessel skills: [moving] {
     string origin_port;
     list<int> current_id_grid <- [];
     int current_grid_index <- 0;
+     int current_fishday <- 0;
+      int day_in_month <- 0;
     // Dynamic scale for drawing
     int vl -> (vlength = "VL1218") ? 1 : ((vlength = "VL1824") ? 2 : ((vlength = "VL2440") ? 3 : 1));
 
@@ -200,6 +232,7 @@ species vessel skills: [moving] {
 experiment surimi type: gui {
     output {
         monitor "Current Month" value: months[current_month_index];
+        monitor "Day in month" value: ((cycle mod 30) = 0) ? 30 : (cycle mod 30);
         display surimi5km type: 2d {
             species cell aspect: base;
             species harbour aspect: base;
