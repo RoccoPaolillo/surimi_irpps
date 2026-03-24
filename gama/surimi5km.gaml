@@ -84,36 +84,70 @@ global {
         }
         month_map[s.MONTH] << s.id_grid;
     }
+    
+    string this_month <- months[current_month_index];
+
+ask vessel {
+    map<string, list<int>> lookup <- id_grids_by_vessel[name];
+    if (lookup != nil and lookup contains_key this_month) {
+        list<int> ids <- lookup[this_month];
+        if (!empty(ids)) {
+            current_id_grid <- ids;
+            current_grid_index <- 0;
+        }
+    }
+}
 }
 
 
-    // This reflex triggers every 30 steps (1 step = 1 day)
-    reflex update_monthly_data when: (cycle > 0) and (cycle mod 30 = 0) {
-        string this_month <- months[current_month_index];
-        write "=== Month update: " + this_month;
-        
-        ask vessel {
-            map<string, list<int>> lookup <- id_grids_by_vessel[self.name];
-            if (lookup != nil and lookup contains_key this_month) {
-                list<int> ids <- lookup[this_month];
-                if (!empty(ids)) {
-                    self.current_id_grid <- first(ids);
-                    // Move the vessel to the cell location
-                    cell target_cell <- cell first_with (int(each.id) = self.current_id_grid);
-                    if (target_cell != nil) {
-                        location <- target_cell.location;
-                    }
-                }
+reflex move_vessels_daily {
+    ask vessel {
+        if (!empty(current_id_grid)) {
+            int next_id <- current_id_grid[current_grid_index];
+
+            cell target_cell <- cell first_with (int(each.id) = next_id);
+            if (target_cell != nil) {
+                location <- target_cell.location;
+            }
+
+            current_grid_index <- current_grid_index + 1;
+
+            if (current_grid_index >= length(current_id_grid)) {
+                current_grid_index <- 0;
             }
         }
-// stop after December
+    }
+}
+
+reflex update_monthly_data when: (cycle > 0) and (cycle mod 30 = 0) {
+    string this_month <- months[current_month_index];
+    write "=== Month update: " + this_month;
+    
+    ask vessel {
+        map<string, list<int>> lookup <- id_grids_by_vessel[name];
+        if (lookup != nil and lookup contains_key this_month) {
+            list<int> ids <- lookup[this_month];
+            if (!empty(ids)) {
+                current_id_grid <- ids;
+                current_grid_index <- 0;
+            } else {
+                current_id_grid <- [];
+                current_grid_index <- 0;
+            }
+        } else {
+            current_id_grid <- [];
+            current_grid_index <- 0;
+        }
+    }
+
     if (current_month_index = length(months) - 1) {
         write "End of year reached";
         do pause;
     } else {
         current_month_index <- current_month_index + 1;
     }
-    }
+}
+
 }
 
 species cell {
@@ -136,9 +170,12 @@ species harbour {
 }
 
 species vessel skills: [moving] {
-    string name; string vlength; string gear; string origin_port;
-    int current_id_grid <- -1;
-    
+    string name; 
+    string vlength; 
+    string gear; 
+    string origin_port;
+    list<int> current_id_grid <- [];
+    int current_grid_index <- 0;
     // Dynamic scale for drawing
     int vl -> (vlength = "VL1218") ? 1 : ((vlength = "VL1824") ? 2 : ((vlength = "VL2440") ? 3 : 1));
 
