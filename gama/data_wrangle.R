@@ -46,14 +46,32 @@ shape %>%
   filter(n_Gear > 1)
 ##
 shape <- st_read("IBM_grid5km.shp")
-sub_shape <- shape %>% filter(CFR %in% c("boat_100","boat_7","boat_153") & Species %in% c("ARA","ARS","DPS"))
-grid_list <- shape %>% distinct(id)
+shape_filtered <- shape %>% select(id, CFR, MONTH, Gear, VL, harbour, depth, fishday, geometry) %>%
+  group_by(id) %>%
+  mutate(avg_depth = mean(depth)) %>%
+  select(-depth)
 
-sub_shape2 <- st_join(shape, sub_shape, join = st_intersects)
+# df_flagged <- shape_filtered %>%
+#   group_by(id, CFR, VL, MONTH) %>%
+#   mutate(fishday_consistent = n_distinct(fishday) == 1) %>%
+#   ungroup()
 
-write.csv(sub_shape,file = "sub_shape5km.csv")
-write_sf(sub_shape, "sub_shape5km.shp")
+shape_filtered <- distinct(shape_filtered %>% st_drop_geometry()) 
 
+shape_cleaned <- unique(shape %>% select(id,geometry))
+
+shape_filtered <- left_join(shape_filtered,shape_cleaned,by = "id")
+# shape_filtered <- shape_filtered %>% select(-avg_depth)
+shapefile_shape <- st_as_sf(shape_filtered, crs = st_crs(shape))
+
+write_sf(shapefile_shape, "sub_shape5km_new.shp")
+
+
+
+write.csv(shape_filtered,file = "sub_shape5km.csv")
+# write_sf(sub_shape, "sub_shape5km.shp")
+
+grid5km <- st_read("grid5km.shp")
 
 
 grid <- st_read("grid_sf.shp")
@@ -124,7 +142,5 @@ length(unique(shapefin$id_grid))
 unique(shapefin$W_mean.x != shapefin$W_mean.y)
 
 #####
-
-shape5km <- 
 
 
