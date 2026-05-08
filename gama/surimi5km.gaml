@@ -126,7 +126,7 @@ ask vessel {
 
 reflex move_vessels_daily {
     ask vessel {
-        if (!empty(current_id_grid) and (day_in_month < current_fishday)) {
+        if (!empty(current_id_grid) and (current_fishday > 0) and (day_in_month < current_fishday)) {
             int next_id <- current_id_grid[current_grid_index];
 
             cell target_cell <- cell first_with (int(each.id) = next_id);
@@ -139,6 +139,9 @@ reflex move_vessels_daily {
             if (current_grid_index >= length(current_id_grid)) {
                 current_grid_index <- 0;
             }
+            
+            // count one fishing/movement day
+            day_in_month <- day_in_month + 1;
         }
     }
 }
