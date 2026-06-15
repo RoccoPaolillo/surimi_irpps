@@ -22,7 +22,7 @@ global {
         "July","August","September","October","November","December"
     ];
     int current_month_index <- 0;
-    string current_month -> months[current_month_index]; // Dynamic string tracking active month
+    string current_month -> months[current_month_index];
     
     geometry shape <- envelope(shape_file_grid);
 
@@ -110,7 +110,7 @@ global {
                 if (!empty(ids)) {
                     current_id_grid <- ids;
                     current_grid_index <- 0;
-                    day_in_month <- 0;
+                    grp_done_for_month <- false;
 
                     list<sub_grid> my_month_data <- sub_grid where ((each.vessel_name = name) and (each.MONTH = target_month));
                     if !empty(my_month_data) {
@@ -125,46 +125,60 @@ global {
                 do reset_vessel_data;
             }
         }
-       
     }
 
-    /* --- Reflexes --- */
+     /* --- Reflexes --- */
 
-    reflex move_vessels_daily {
-        ask vessel {
-            if (!empty(current_id_grid) and (current_fishday > 0) and (day_in_month < current_fishday)) {
-                int next_id <- current_id_grid[current_grid_index];
+reflex move_vessels_daily {
+    ask vessel {
 
-                cell target_cell <- cell first_with (int(each.id) = next_id);
-                if (target_cell != nil) {
-                    location <- target_cell.location;
-                }
+        // Move one cell per cycle until all monthly cells are covered
+        if (!empty(current_id_grid) and current_grid_index < length(current_id_grid)) {
 
-                current_grid_index <- current_grid_index + 1;
-                if (current_grid_index >= length(current_id_grid)) {
-                    current_grid_index <- 0;
-                }
-                
-                day_in_month <- day_in_month + 1;
-                grp_day <- grp_day + grpest_perday  ;
+            int next_id <- current_id_grid[current_grid_index];
+
+            cell target_cell <- cell first_with (int(each.id) = next_id);
+            if (target_cell != nil) {
+                location <- target_cell.location;
             }
-        }
-    }
 
-    // Triggers at the end of every 30-day block
-    reflex update_monthly_data when: (cycle > 0) and (cycle mod 30 = 0) {
-        if (current_month_index = length(months) - 1) {
-            write "End of year reached. Final simulation month processed.";
-            do pause;
-        } else {
-            // Safe increment: Only step forward when the previous month is fully finished
-           // string previous_month <- months[current_month_index -1];
-           // write "=== End of Month: " + previous_month;
-            current_month_index <- current_month_index + 1;
-            do assign_vessel_monthly_data;
+            current_grid_index <- current_grid_index + 1;
+        }
+
+        // Add monthly GRP only once, after the whole route is completed
+        if (!grp_done_for_month and
+            !empty(current_id_grid) and
+            current_grid_index >= length(current_id_grid)) {
+
+            grp_day <- grp_day + (grpest_perday * current_fishday);
+            grp_done_for_month <- true;
         }
     }
 }
+
+reflex debug {
+    write "Running cycle " + cycle  + " month " + current_month ;
+}
+
+reflex update_monthly_data when:
+    all_match(vessel,
+        empty(each.current_id_grid)
+        or each.current_grid_index >= length(each.current_id_grid)) {
+
+    if (current_month_index = length(months) - 1) {
+        do pause;
+        write "End of December reached. Simulation finished.";
+    } else {
+        current_month_index <- current_month_index + 1;
+        do assign_vessel_monthly_data;
+    }
+}
+
+
+
+}
+
+
 
 species cell {
     string id;
@@ -199,10 +213,10 @@ species vessel skills: [moving] {
     list<int> current_id_grid <- [];
     int current_grid_index <- 0;
     int current_fishday <- 0;
-    int day_in_month <- 0;
     float grpest_perday <-  0.00 ;
     float grp_day <- 0.0;
-    float fuelcost_day <- 0.0;
+    float fuelcost_day <- 0.0; 
+    bool grp_done_for_month <- false;
     
     // Dynamic scale for drawing
     int vl -> (vlength = "VL1218") ? 1 : ((vlength = "VL1824") ? 2 : ((vlength = "VL2440") ? 3 : 1));
@@ -211,7 +225,7 @@ species vessel skills: [moving] {
         current_id_grid <- [];
         current_grid_index <- 0;
         current_fishday <- 0;
-        day_in_month <- 0;
+        grp_done_for_month <- false;
     }
 
     aspect base {
@@ -222,11 +236,19 @@ species vessel skills: [moving] {
 experiment surimi type: gui {
     output {
         monitor "Current Month" value: current_month;
-        monitor "Day in month" value: ((cycle mod 30) = 0) ? 30 : (cycle mod 30);
+
         display surimi5km type: 2d {
             species cell aspect: base;
             species harbour aspect: base;
             species vessel aspect: base;
+        }
+
+        display grp_plot {
+            chart "Average GRP by vessel length" type: series {
+                data "VL1218" value: mean((vessel where (each.vlength = "VL1218")) collect each.grp_day);
+                data "VL1824" value: mean((vessel where (each.vlength = "VL1824")) collect each.grp_day);
+                data "VL2440" value: mean((vessel where (each.vlength = "VL2440")) collect each.grp_day);
+            }
         }
     }
 }
