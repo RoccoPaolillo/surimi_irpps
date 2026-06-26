@@ -6,6 +6,7 @@ library(tidyr)
 library(readr)
 library(writexl)
 library(readxl)
+library(ggplot2)
 
 df <- read.csv("vessel_by_port.csv",sep=",")
 b <- df %>% group_by(MMSI,vlength) %>% distinct(MMSI,vlength)
@@ -74,7 +75,7 @@ write_sf(shapefile_shape, "sub_shape5km_new.shp")
 write.csv(shape_filtered,file = "sub_shape5km.csv")
 # write_sf(sub_shape, "sub_shape5km.shp")
 
-grid5km <- st_read("grid5km.shp")
+grid5km <- st_read("smart5km/grid5km.shp")
 
 
 grid <- st_read("grid_sf.shp")
@@ -208,4 +209,47 @@ write.csv(AER_daysatsea,
 "new_data_final/AER_daysatsea.csv",
 row.names = FALSE,
 fileEncoding = "UTF-8")
+
+
+###### STECF new variable Ago 2026
+
+dfnew <- read_excel("Full_model_eco_agg_GRP.xlsx", col_names = FALSE)
+txt <- c(dfnew[[1]])
+dfnew <- read_csv(I(txt))
+rm(txt)
+
+dfnew <- dfnew %>% mutate(id_grid = as.character(id_grid))
+grid5km <- st_read("smart5km/grid5km.shp")
+grid5km <- grid5km %>%
+  rename(
+    id_grid = id
+  )  %>% mutate(
+    id_grid = as.character(id_grid)
+  )
+
+dfnew <- left_join(dfnew,grid5km, by = "id_grid")
+
+dfnew <- dfnew %>% filter(YEAR == 2023)
+dfnew <- dfnew %>% st_as_sf(crs = 4326)
+
+dfnew <- dfnew %>%
+  group_by(MONTH, id_grid) %>%
+  mutate(
+    landing_month = sum(landing_grid_sum, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+sf::st_write(dfnew, "stecf_fulldata.shp")
+
+df_shape <- st_read("stecf_fulldata.shp")
+
+ports <- st_read("harbs_df_sf.shp")
+grid <- st_read("harbs_df_sf.shp")
+
+
+
+
+
+
+
 
