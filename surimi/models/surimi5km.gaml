@@ -297,13 +297,13 @@ experiment surimi type: gui {
             }
             }
          
- //       display grp_plot {
- //           chart "Landing monthly" type: series {
- //               data "VL1218" value: median((vessel where (each.vlength = "VL1218")) collect each.landing_collected_monthly);
- //               data "VL1824" value: median((vessel where (each.vlength = "VL1824")) collect each.landing_collected_monthly);
- //               data "VL2440" value: median((vessel where (each.vlength = "VL2440")) collect each.landing_collected_monthly);
- //           }
- //           }    
+       display landing_plot {
+           chart "Landing monthly" type: series {
+               data "VL1218" value: median((vessel where (each.vlength = "VL1218")) collect each.landing_collected_monthly);
+               data "VL1824" value: median((vessel where (each.vlength = "VL1824")) collect each.landing_collected_monthly);
+               data "VL2440" value: median((vessel where (each.vlength = "VL2440")) collect each.landing_collected_monthly);
+           }
+           }    
             
         } 
 }
