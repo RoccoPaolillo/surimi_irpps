@@ -25,6 +25,8 @@ global {
     map<string, map<string, float>> landing_m_by_cell_month <- [];
     int current_month_index <- 0;
     string current_month -> months[current_month_index];
+    int days_in_month <- 30;
+    int day_of_month <- 0;
     
     geometry shape <- envelope(shape_file_grid);
     string scenario <- "baseline";
@@ -188,9 +190,8 @@ reflex move_vessels_daily {
 else {
 ask vessel{
 	cell target_cell <-  one_of(cell);
-	 if (target_cell != nil) {
-                location <- target_cell.location;
-}
+	location <- target_cell.location;
+     
 
 }
  }
@@ -201,17 +202,36 @@ reflex debug {
     write "Running cycle " + cycle  + " month " + current_month ;
 }
 
-reflex update_monthly_data when:
-    all_match(vessel,
-        empty(each.current_id_grid)
-        or each.current_grid_index >= length(each.current_id_grid)) {
+reflex update_monthly_data {
 
-    if (current_month_index = length(months) - 1) {
-        do pause;
-        write "End of December reached. Simulation finished.";
+    bool change_month <- false;
+
+    if (scenario = "baseline") {
+
+        change_month <- all_match(vessel,
+            empty(each.current_id_grid)
+            or each.current_grid_index >= length(each.current_id_grid));
+
     } else {
-        current_month_index <- current_month_index + 1;
-        do assign_vessel_monthly_data;
+
+        day_of_month <- day_of_month + 1;
+
+        if (day_of_month >= days_in_month) {
+            change_month <- true;
+        }
+    }
+
+    if (change_month) {
+
+        if (current_month_index = length(months) - 1) {
+            do pause;
+            write "End of December reached. Simulation finished.";
+
+        } else {
+            current_month_index <- current_month_index + 1;
+            day_of_month <- 0;
+            do assign_vessel_monthly_data;
+        }
     }
 }
 
