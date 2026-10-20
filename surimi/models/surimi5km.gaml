@@ -27,6 +27,7 @@ global {
     string current_month -> months[current_month_index];
     
     geometry shape <- envelope(shape_file_grid);
+    string scenario <- "baseline";
 
     init {
         // 1. Load Grid
@@ -143,13 +144,14 @@ if !empty(my_month_data) {
 
 
 reflex move_vessels_daily {
+	if (scenario = "baseline"){
     ask vessel {
 
         if (!empty(current_id_grid) and current_grid_index < length(current_id_grid)) {
 
-            int next_id <- current_id_grid[current_grid_index];
+		int next_id <- current_id_grid[current_grid_index];
+		cell target_cell <- cell first_with (int(each.id) = next_id);
 
-            cell target_cell <- cell first_with (int(each.id) = next_id);
 
             if (target_cell != nil) {
                 location <- target_cell.location;
@@ -183,6 +185,17 @@ reflex move_vessels_daily {
         }
     }
 }
+else {
+ask vessel{
+	cell target_cell <-  one_of(cell);
+	 if (target_cell != nil) {
+                location <- target_cell.location;
+}
+
+}
+ }
+ }
+
 
 reflex debug {
     write "Running cycle " + cycle  + " month " + current_month ;
@@ -280,8 +293,13 @@ action reset_vessel_data {
 }
 
 experiment surimi type: gui {
+	
+	parameter "Scenario" var: scenario
+    among: ["baseline", "strategies"];
+	
     output {
         monitor "Current Month" value: current_month;
+
        
         display surimi5km type: 2d {
             species cell aspect: base;
