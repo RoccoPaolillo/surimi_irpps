@@ -25,8 +25,9 @@ global {
     map<string, map<string, float>> landing_m_by_cell_month <- [];
     int current_month_index <- 0;
     string current_month -> months[current_month_index];
-    int days_in_month <- 30;
-    int day_of_month <- 0;
+//    int days_in_month <- 30;
+//    int day_of_month <- 0;
+	int fishday_scenario <- 5;
     
     geometry shape <- envelope(shape_file_grid);
     string scenario <- "baseline";
@@ -188,15 +189,39 @@ reflex move_vessels_daily {
     }
 }
 else {
-ask vessel{
-	cell target_cell <-  one_of(cell);
-	location <- target_cell.location;
-     
 
+    ask vessel {
+
+        if (trip_phase = "departure") {
+
+            cell target_cell <- one_of(cell);
+
+            if (target_cell != nil) {
+                location <- target_cell.location;
+                trip_phase <- "return";
+            }
+
+        } else if (trip_phase = "return") {
+
+            harbour home <- harbour first_with
+                (each.name = origin_port);
+
+            if (home != nil) {
+
+                location <- home.location;
+
+                fishdays_completed <- fishdays_completed + 1;
+
+                if (fishdays_completed >= fishday_scenario) {
+                    trip_phase <- "completed";
+                } else {
+                    trip_phase <- "departure";
+                }
+            }
+        }
+    }
 }
- }
- }
-
+}
 
 reflex debug {
     write "Running cycle " + cycle  + " month " + current_month ;
@@ -214,23 +239,38 @@ reflex update_monthly_data {
 
     } else {
 
-        day_of_month <- day_of_month + 1;
-
-        if (day_of_month >= days_in_month) {
-            change_month <- true;
-        }
+        change_month <- all_match(vessel,
+            each.fishdays_completed >= fishday_scenario
+            and each.trip_phase = "completed");
     }
 
     if (change_month) {
 
         if (current_month_index = length(months) - 1) {
+
             do pause;
             write "End of December reached. Simulation finished.";
 
         } else {
+
             current_month_index <- current_month_index + 1;
-            day_of_month <- 0;
             do assign_vessel_monthly_data;
+
+            if (scenario = "strategies") {
+
+                ask vessel {
+
+                    fishdays_completed <- 0;
+                    trip_phase <- "departure";
+
+                    harbour home <- harbour first_with
+                        (each.name = origin_port);
+
+                    if (home != nil) {
+                        location <- home.location;
+                    }
+                }
+            }
         }
     }
 }
@@ -294,6 +334,8 @@ species vessel skills: [moving] {
     float fuelcost_day <- 0.0; 
     bool grp_done_for_month <- false;
     float landing_collected_monthly <- 0;
+    int fishdays_completed <- 0;
+    string trip_phase <- "departure";
     
     // Dynamic scale for drawing
     int vl -> (vlength = "VL1218") ? 1 : ((vlength = "VL1824") ? 2 : ((vlength = "VL2440") ? 3 : 1));
@@ -316,6 +358,12 @@ experiment surimi type: gui {
 	
 	parameter "Scenario" var: scenario
     among: ["baseline", "strategies"];
+    
+    parameter "Fishdays per month"
+    var: fishday_scenario
+    min: 1
+    max: 30
+    step: 1;
 	
     output {
         monitor "Current Month" value: current_month;
