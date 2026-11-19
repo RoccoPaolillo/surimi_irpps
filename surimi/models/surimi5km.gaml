@@ -139,6 +139,9 @@ create cell from: shape_file_grid with: [
         string target_month <- months[current_month_index];
                 
         ask vessel {
+        	
+        	do reset_vessel_data;
+        	
             map<string, list<int>> lookup <- id_grids_by_vessel[name];
             if (lookup != nil and lookup contains_key target_month) {
                 list<int> ids <- lookup[target_month];
