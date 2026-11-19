@@ -17,6 +17,18 @@ global {
     "VL1824" :: 145.5460,
     "VL1218" :: 129.6214
 ];
+
+	map<string, float> gamma_shape_by_length <- [
+		"VL1218" :: 4.48,
+		"VL1824" :: 4.35,
+		"VL2440" :: 1.57 
+	];
+	
+	map<string, float> gamma_scale_by_length <- [
+		"VL1218" :: 7.75,
+		"VL1824" :: 4.59,
+		"VL2440" :: 18.9
+	];
     
     list<string> months <- [
         "January","February","March","April","May","June",
@@ -88,6 +100,12 @@ create cell from: shape_file_grid with: [
                     origin_port <- v_data.vessel_origharbour;
                     grpest_perday <- grpest_perday_by_length[vlength];
                 //    write "vlength = " + vlength + " grpest_perday = " + grpest_perday;
+                
+                	// for the gamma distribution lnd_capacity
+                	float shape_param <- gamma_shape_by_length[vlength];
+                	float scale_param <- gamma_scale_by_length[vlength];
+                	
+                	lnd_capacity <- gamma_rnd(shape_param, scale_param);
 
                     harbour home <- harbour first_with (each.name = origin_port);
                     if (home != nil) {
@@ -194,29 +212,50 @@ else {
 
         if (trip_phase = "departure") {
 
-            cell target_cell <- one_of(cell);
+            if (!empty(current_id_grid)) {
 
-            if (target_cell != nil) {
-                location <- target_cell.location;
-                trip_phase <- "return";
-            }
+                // Visit the next assigned grid cell
+                if (current_grid_index < length(current_id_grid)) {
 
-        } else if (trip_phase = "return") {
+                    int next_id <- current_id_grid[current_grid_index];
 
-            harbour home <- harbour first_with
-                (each.name = origin_port);
+                    cell target_cell <- cell first_with
+                        (int(each.id) = next_id);
 
-            if (home != nil) {
+                    if (target_cell != nil) {
+                        location <- target_cell.location;
+                        current_grid_index <- current_grid_index + 1;
+                    }
 
-                location <- home.location;
-
-                fishdays_completed <- fishdays_completed + 1;
-
-                if (fishdays_completed >= fishday_scenario) {
-                    trip_phase <- "completed";
                 } else {
-                    trip_phase <- "departure";
+
+                    // All cells visited: return to harbour
+                    harbour home <- harbour first_with
+                        (each.name = origin_port);
+
+                    if (home != nil) {
+
+                        location <- home.location;
+
+                        // One fishday completed
+                        fishdays_completed <- fishdays_completed + 1;
+
+                        if (fishdays_completed >= fishday_scenario) {
+
+                            trip_phase <- "completed";
+
+                        } else {
+
+                            // Start the assigned route again
+                            current_grid_index <- 0;
+                        }
+                    }
                 }
+
+            } else {
+
+                // No assigned grid cells for this month
+                trip_phase <- "completed";
             }
         }
     }
@@ -240,8 +279,7 @@ reflex update_monthly_data {
     } else {
 
         change_month <- all_match(vessel,
-            each.fishdays_completed >= fishday_scenario
-            and each.trip_phase = "completed");
+            each.trip_phase = "completed");
     }
 
     if (change_month) {
@@ -261,6 +299,7 @@ reflex update_monthly_data {
                 ask vessel {
 
                     fishdays_completed <- 0;
+                    current_grid_index <- 0;
                     trip_phase <- "departure";
 
                     harbour home <- harbour first_with
@@ -336,6 +375,7 @@ species vessel skills: [moving] {
     float landing_collected_monthly <- 0;
     int fishdays_completed <- 0;
     string trip_phase <- "departure";
+    float lnd_capacity <- 0.0;
     
     // Dynamic scale for drawing
     int vl -> (vlength = "VL1218") ? 1 : ((vlength = "VL1824") ? 2 : ((vlength = "VL2440") ? 3 : 1));
