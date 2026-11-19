@@ -174,7 +174,26 @@ missing_in_ibm <- anti_join(
 
 # Values for fishday
 
-AER <- read.csv("new_data_final/AER_economic_fleet segment.csv",sep=",")
+AER <- read.csv("new_data_final/AER_economic_fleet segment.csv",sep=";")
+
+x <- readLines("new_data_final/AER_economic_fleet segment.csv")
+
+# remove the outer quote surrounding each complete row
+x <- sub('^"', '', x)
+x <- sub('"$', '', x)
+
+# convert doubled quotes to normal quotes
+x <- gsub('""', '"', x)
+
+AER <- read.csv(
+  text = x,
+  header = TRUE,
+  sep = ",",
+  quote = '"',
+  na.strings = "NA",
+  check.names = FALSE
+)
+
 names(AER) <- gsub(" ","_",names(AER))
 # names(AER)[names(AER) == "Repair_&_maintenance_costs"] <- "Repair_maintenance_costs"
 # names(AER)[names(AER) == "Other_non-variable_costs"] <- "Other_nonvariable_costs"
@@ -219,7 +238,7 @@ dfnew <- read_csv(I(txt))
 rm(txt)
 
 dfnew <- dfnew %>% mutate(id_grid = as.character(id_grid))
-grid5km <- st_read("smart5km/grid5km.shp")
+grid5km <- st_read("grid5km.shp")
 grid5km <- grid5km %>%
   rename(
     id_grid = id
@@ -246,10 +265,142 @@ df_shape <- st_read("stecf_fulldata.shp")
 ports <- st_read("harbs_df_sf.shp")
 grid <- st_read("harbs_df_sf.shp")
 
+# cleaning outliers and doubles
+
+df_shape <- df_shape %>%
+  filter(
+    CFR != "boat_642",
+    CFR != "boat_110" | VL == "VL1218"
+  )
+
+df_shape <- df_shape %>%
+  mutate(
+    lnd_fshd = (lndng__ / fishdys),
+    priceunit = round((vl_f_l_ / lndng__), 2)
+  ) %>% st_drop_geometry() 
+
+summary(df_shape$priceunit)
+sd(df_shape$priceunit)
+df_shape %>%
+  ggplot(aes(x = priceunit)) +
+  geom_histogram(bins = 30, fill = "blue", color = "black") +
+  geom_vline(
+    xintercept = median(df_shape$priceunit, na.rm = TRUE),
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  annotate(
+    "text",
+    x =  median(df_shape$priceunit, na.rm = TRUE),
+    y = Inf,
+    label = paste0("Median = ", round(median(df_shape$priceunit, na.rm = TRUE), 2), " €/kg"),
+    color = "red",
+    hjust = -0.1,
+    vjust = 1.5,
+    size = 4
+  ) +
+  labs(
+    x = "Unit price (€/kg)",
+    y = "Frequency",
+    title = "Distribution of unit landing prices"
+  ) +
+  theme_bw()
+
+df_shape %>%
+  ggplot(aes(x = lnd_fshd)) +
+  geom_histogram(bins = 30, fill = "blue", color = "black") +
+  geom_vline(
+    xintercept = median(df_shape$lnd_fshd, na.rm = TRUE),
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  annotate(
+    "text",
+    x =  median(df_shape$lnd_fshd, na.rm = TRUE),
+    y = Inf,
+    label = paste0("Median = ", round(median(df_shape$lnd_fshd, na.rm = TRUE), 2), " Kg/fishdays"),
+    color = "red",
+    hjust = -0.1,
+    vjust = 1.5,
+    size = 4
+  ) +
+  labs(
+    x = "Landing Kg",
+    y = "Frequency",
+    title = "Distribution of landing per fishdays"
+  ) +
+  theme_bw()
+
+df_shape %>%
+  filter(! CFR %in% c("boat_113","boat_763"))%>%
+  ggplot(
+    aes(x = priceunit,
+        y = lnd_fshd)
+  ) +
+  geom_point() + 
+  labs(y = "landing per fishday (Kg)",
+       x = "price per unit (Euro)") + 
+  theme_bw()
+
+plotly::ggplotly(pl)
+
+summary(df_shape[df_shape$VL == "VL2440",]$priceunit)
+sd(df_shape[df_shape$VL == "VL2440",]$priceunit)
+
+month_vl_price <- df_shape %>% 
+  filter(! CFR %in% c("boat_113","boat_763"))%>%
+  group_by(MONTH) %>%
+  summarise(mean_priceunit = mean(priceunit), 
+            median_priceunit = median(priceunit), 
+            sd_priceunit = sd(priceunit),
+            .groups = "drop")
+
+month_vl_price %>% 
+  mutate(
+    MONTH = factor(
+      MONTH,
+      levels = rev(month.name)
+    )
+  ) %>%
+  ggplot(
+  aes(x = MONTH, y = mean_priceunit) 
+) +
+  geom_col() +
+  coord_flip() +
+  theme_bw()
 
 
+month_vl_lndfsh <- df_shape %>%
+  filter(! CFR %in% c("boat_113","boat_763"))%>%
+  group_by(MONTH, VL, CFR) %>%
+  summarise(
+    vessel_mean = mean(lnd_fshd, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  group_by(MONTH, VL) %>%
+  summarise(
+    mean_lndfsh = mean(vessel_mean, na.rm = TRUE),
+    median_lndfsh = median(vessel_mean, na.rm = TRUE),
+    sd_lndfsh = sd(vessel_mean, na.rm = TRUE),
+    n_vessels = sum(!is.na(vessel_mean)),
+    .groups = "drop"
+  )
 
-
-
-
-
+month_vl_lndfsh %>%  
+  mutate(
+    MONTH = factor(
+      MONTH,
+      levels = rev(month.name)
+    )
+  ) %>%
+  ggplot(
+    aes(x = MONTH, y = mean_lndfsh,
+        color = VL,
+        group = VL) 
+  ) +
+  geom_point() +
+  geom_line() +
+  coord_flip() +
+  theme_bw()
