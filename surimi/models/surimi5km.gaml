@@ -17,6 +17,18 @@ global {
     "VL1824" :: 145.5460,
     "VL1218" :: 129.6214
 ];
+
+	map<string, float> gamma_shape_by_length <- [
+		"VL1218" :: 4.48,
+		"VL1824" :: 4.35,
+		"VL2440" :: 1.57 
+	];
+	
+	map<string, float> gamma_scale_by_length <- [
+		"VL1218" :: 7.75,
+		"VL1824" :: 4.59,
+		"VL2440" :: 18.9
+	];
     
     list<string> months <- [
         "January","February","March","April","May","June",
@@ -25,8 +37,12 @@ global {
     map<string, map<string, float>> landing_m_by_cell_month <- [];
     int current_month_index <- 0;
     string current_month -> months[current_month_index];
+//    int days_in_month <- 30;
+//    int day_of_month <- 0;
+	int fishday_scenario <- 5;
     
     geometry shape <- envelope(shape_file_grid);
+    string scenario <- "baseline";
 
     init {
         // 1. Load Grid
@@ -84,6 +100,12 @@ create cell from: shape_file_grid with: [
                     origin_port <- v_data.vessel_origharbour;
                     grpest_perday <- grpest_perday_by_length[vlength];
                 //    write "vlength = " + vlength + " grpest_perday = " + grpest_perday;
+                
+                	// for the gamma distribution lnd_capacity
+                	float shape_param <- gamma_shape_by_length[vlength];
+                	float scale_param <- gamma_scale_by_length[vlength];
+                	
+                	lnd_capacity <- gamma_rnd(shape_param, scale_param);
 
                     harbour home <- harbour first_with (each.name = origin_port);
                     if (home != nil) {
@@ -117,6 +139,9 @@ create cell from: shape_file_grid with: [
         string target_month <- months[current_month_index];
                 
         ask vessel {
+        	
+        	do reset_vessel_data;
+        	
             map<string, list<int>> lookup <- id_grids_by_vessel[name];
             if (lookup != nil and lookup contains_key target_month) {
                 list<int> ids <- lookup[target_month];
@@ -128,7 +153,7 @@ create cell from: shape_file_grid with: [
 if !empty(my_month_data) {
     current_id_grid <- my_month_data collect each.id_grid;
     current_landing <- my_month_data collect each.landing;
-    current_fishday <- first(my_month_data).fishday;
+    current_fishday <- my_month_data collect each.fishday;
     landing_collected_monthly <- 0.0;
     current_grid_index <- 0;
     grp_done_for_month <- false;
@@ -143,62 +168,198 @@ if !empty(my_month_data) {
 
 
 reflex move_vessels_daily {
-    ask vessel {
+	if (scenario = "baseline"){
+     ask vessel {
 
-        if (!empty(current_id_grid) and current_grid_index < length(current_id_grid)) {
+        if (!empty(current_id_grid) and
+            current_grid_index < length(current_id_grid)) {
 
             int next_id <- current_id_grid[current_grid_index];
+            int next_fishday <- current_fishday[current_grid_index];
 
-            cell target_cell <- cell first_with (int(each.id) = next_id);
+            cell target_cell <- cell first_with
+                (int(each.id) = next_id);
 
-            if (target_cell != nil) {
-                location <- target_cell.location;
+            harbour home <- harbour first_with
+                (each.name = origin_port);
 
-                if (current_grid_index < length(current_landing)) {
-                    float catch_value <- current_landing[current_grid_index];
+            if (next_fishday <= 0) {
 
-                    landing_collected_monthly <- landing_collected_monthly + catch_value;
+                // Skip grids without fishing days
+                current_grid_index <- current_grid_index + 1;
+                fishdays_in_current_grid <- 0;
 
+            } else if (target_cell != nil and home != nil) {
+
+                if (trip_phase = "departure") {
+
+                    // Move from harbour to fishing grid
+                    location <- target_cell.location;
+
+                    // Collect daily share of observed landings
+                    float catch_value <-
+                        current_landing[current_grid_index]
+                        / float(next_fishday);
+
+                    landing_collected_monthly <-
+                        landing_collected_monthly + catch_value;
+
+                    // Subtract landings from the grid
                     if (landing_m_by_cell_month contains_key string(next_id) and
                         landing_m_by_cell_month[string(next_id)] contains_key current_month) {
 
                         landing_m_by_cell_month[string(next_id)][current_month] <-
                             max([
                                 0.0,
-                                landing_m_by_cell_month[string(next_id)][current_month] - catch_value
+                                landing_m_by_cell_month[string(next_id)][current_month]
+                                - catch_value
                             ]);
                     }
+
+                    trip_phase <- "return";
+
+                } else if (trip_phase = "return") {
+
+                    // Return to origin harbour
+                    location <- home.location;
+
+                    // One fishing day completed
+                    fishdays_in_current_grid <-
+                        fishdays_in_current_grid + 1;
+
+                    fishdays_completed <-
+                        fishdays_completed + 1;
+
+                    // Accumulate GRP for one fishing day
+                    grp_cumulative <-
+                        grp_cumulative + grpest_perday;
+
+                    // Check whether all fishing days
+                    // in this grid have been completed
+                    if (fishdays_in_current_grid >= next_fishday) {
+
+                        current_grid_index <-
+                            current_grid_index + 1;
+
+                        fishdays_in_current_grid <- 0;
+                    }
+
+                    trip_phase <- "departure";
                 }
             }
-
-            current_grid_index <- current_grid_index + 1;
         }
 
-        if (!grp_done_for_month and
-            !empty(current_id_grid) and
-            current_grid_index >= length(current_id_grid)) {
-
-            grp_cumulative <- grp_cumulative + (grpest_perday * current_fishday);
-            grp_done_for_month <- true;
+        // Monthly fishing activity completed
+        if (current_grid_index >= length(current_id_grid)) {
+            trip_phase <- "completed";
         }
     }
+}
+else {
+
+    ask vessel {
+
+        if (trip_phase = "departure") {
+
+            if (!empty(current_id_grid)) {
+
+                // Visit the next assigned grid cell
+                if (current_grid_index < length(current_id_grid)) {
+
+                    int next_id <- current_id_grid[current_grid_index];
+
+                    cell target_cell <- cell first_with
+                        (int(each.id) = next_id);
+
+                    if (target_cell != nil) {
+                        location <- target_cell.location;
+                        current_grid_index <- current_grid_index + 1;
+                    }
+
+                } else {
+
+                    // All cells visited: return to harbour
+                    harbour home <- harbour first_with
+                        (each.name = origin_port);
+
+                    if (home != nil) {
+
+                        location <- home.location;
+
+                        // One fishday completed
+                        fishdays_completed <- fishdays_completed + 1;
+
+                        if (fishdays_completed >= fishday_scenario) {
+
+                            trip_phase <- "completed";
+
+                        } else {
+
+                            // Start the assigned route again
+                            current_grid_index <- 0;
+                        }
+                    }
+                }
+
+            } else {
+
+                // No assigned grid cells for this month
+                trip_phase <- "completed";
+            }
+        }
+    }
+}
 }
 
 reflex debug {
     write "Running cycle " + cycle  + " month " + current_month ;
 }
 
-reflex update_monthly_data when:
-    all_match(vessel,
-        empty(each.current_id_grid)
-        or each.current_grid_index >= length(each.current_id_grid)) {
+reflex update_monthly_data {
 
-    if (current_month_index = length(months) - 1) {
-        do pause;
-        write "End of December reached. Simulation finished.";
+    bool change_month <- false;
+
+    if (scenario = "baseline") {
+
+        change_month <- all_match(vessel,
+            empty(each.current_id_grid)
+            or each.current_grid_index >= length(each.current_id_grid));
+
     } else {
-        current_month_index <- current_month_index + 1;
-        do assign_vessel_monthly_data;
+
+        change_month <- all_match(vessel,
+            each.trip_phase = "completed");
+    }
+
+    if (change_month) {
+
+        if (current_month_index = length(months) - 1) {
+
+            do pause;
+            write "End of December reached. Simulation finished.";
+
+        } else {
+
+            current_month_index <- current_month_index + 1;
+            do assign_vessel_monthly_data;
+
+            if (scenario = "strategies") {
+
+                ask vessel {
+
+                    fishdays_completed <- 0;
+                    current_grid_index <- 0;
+                    trip_phase <- "departure";
+
+                    harbour home <- harbour first_with
+                        (each.name = origin_port);
+
+                    if (home != nil) {
+                        location <- home.location;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -255,12 +416,16 @@ species vessel skills: [moving] {
     list<int> current_id_grid <- [];
     list<float> current_landing <- [];
     int current_grid_index <- 0;
-    int current_fishday <- 0;
+    list<int> current_fishday <- [];
     float grpest_perday <-  0.00 ;
     float grp_cumulative <- 0.0;
     float fuelcost_day <- 0.0; 
     bool grp_done_for_month <- false;
     float landing_collected_monthly <- 0;
+    int fishdays_completed <- 0;
+    string trip_phase <- "departure";
+    float lnd_capacity <- 0.0;
+    int fishdays_in_current_grid <- 0;
     
     // Dynamic scale for drawing
     int vl -> (vlength = "VL1218") ? 1 : ((vlength = "VL1824") ? 2 : ((vlength = "VL2440") ? 3 : 1));
@@ -269,9 +434,13 @@ action reset_vessel_data {
     current_id_grid <- [];
     current_landing <- [];
     current_grid_index <- 0;
-    current_fishday <- 0;
+    current_fishday <- [];
     landing_collected_monthly <- 0.0;
     grp_done_for_month <- false;
+    fishdays_in_current_grid <- 0;
+    fishdays_completed <- 0;
+    trip_phase <- "departure";
+    
 }
 
     aspect base {
@@ -280,8 +449,19 @@ action reset_vessel_data {
 }
 
 experiment surimi type: gui {
+	
+	parameter "Scenario" var: scenario
+    among: ["baseline", "strategies"];
+    
+    parameter "Fishdays per month"
+    var: fishday_scenario
+    min: 1
+    max: 30
+    step: 1;
+	
     output {
         monitor "Current Month" value: current_month;
+
        
         display surimi5km type: 2d {
             species cell aspect: base;
