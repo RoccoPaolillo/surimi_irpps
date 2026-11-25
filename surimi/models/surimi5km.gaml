@@ -40,6 +40,7 @@ global {
 //    int days_in_month <- 30;
 //    int day_of_month <- 0;
 	int fishday_scenario <- 5;
+	float beta <- 0.01;
     
     geometry shape <- envelope(shape_file_grid);
     string scenario <- "baseline";
@@ -257,58 +258,125 @@ reflex move_vessels_daily {
 }
 else {
 
-    ask vessel {
+ ask vessel {
+
+        harbour home <- harbour first_with
+            (each.name = origin_port);
 
         if (trip_phase = "departure") {
 
-            if (!empty(current_id_grid)) {
+            // Identify the eligible cells
+            list<int> eligible_ids <- current_id_grid;
 
-                // Visit the next assigned grid cell
-                if (current_grid_index < length(current_id_grid)) {
+            list<cell> eligible_cells <- cell where
+                (eligible_ids contains int(each.id));
 
-                    int next_id <- current_id_grid[current_grid_index];
+            if (!empty(eligible_cells) and home != nil) {
 
-                    cell target_cell <- cell first_with
-                        (int(each.id) = next_id);
+                // DISCRETE CHOICE MODEL
 
-                    if (target_cell != nil) {
-                        location <- target_cell.location;
-                        current_grid_index <- current_grid_index + 1;
-                    }
+                // 1. Calculate systematic utilities
+                list<float> utilities <- eligible_cells collect
+                    (beta * each.current_landing_m);
 
-                } else {
+                // 2. Maximum utility for numerical stability
+                float max_utility <- max(utilities);
 
-                    // All cells visited: return to harbour
-                    harbour home <- harbour first_with
-                        (each.name = origin_port);
+                // 3. Exponentiate utilities
+                list<float> weights <- utilities collect
+                    exp(each - max_utility);
 
-                    if (home != nil) {
+                // 4. Calculate choice probabilities
+                float total_weight <- sum(weights);
 
-                        location <- home.location;
+                list<float> probabilities <- weights collect
+                    (each / total_weight);
 
-                        // One fishday completed
-                        fishdays_completed <- fishdays_completed + 1;
+                // 5. Random selection based on probabilities
+                float random_draw <- rnd(1.0);
+                float cumulative_prob <- 0.0;
 
-                        if (fishdays_completed >= fishday_scenario) {
+                int chosen_index <- length(eligible_cells) - 1;
 
-                            trip_phase <- "completed";
+                loop i from: 0 to: (length(eligible_cells) - 1) {
 
-                        } else {
+                    cumulative_prob <- cumulative_prob
+                        + probabilities[i];
 
-                            // Start the assigned route again
-                            current_grid_index <- 0;
-                        }
+                    if (random_draw <= cumulative_prob) {
+
+                        chosen_index <- i;
+
+                        break;
                     }
                 }
 
+                // 6. Identify selected cell
+                cell target_cell <- eligible_cells[chosen_index];
+
+                // 7. Move to selected fishing cell
+                location <- target_cell.location;
+
+                // 8. Collect landings
+                float catch_value <- min([
+                    lnd_capacity,
+                    target_cell.current_landing_m
+                ]);
+
+                landing_collected_monthly <-
+                    landing_collected_monthly + catch_value;
+
+// from here to veify, it should take based on landing capacity
+
+                // 9. Subtract collected landings
+                string next_id <- target_cell.id;
+
+                if (landing_m_by_cell_month contains_key next_id and
+                    landing_m_by_cell_month[next_id] contains_key current_month) {
+
+                    landing_m_by_cell_month[next_id][current_month] <-
+                        max([
+                            0.0,
+                            landing_m_by_cell_month[next_id][current_month]
+                            - catch_value
+                        ]);
+                }
+
+                // Return during the following cycle
+                trip_phase <- "return";
+
             } else {
 
-                // No assigned grid cells for this month
                 trip_phase <- "completed";
+            }
+
+        } else if (trip_phase = "return") {
+
+            if (home != nil) {
+
+                // Return to origin harbour
+                location <- home.location;
+
+                // Complete one fishday
+                fishdays_completed <- fishdays_completed + 1;
+
+                // Accumulate daily GRP
+                grp_cumulative <- grp_cumulative + grpest_perday;
+
+                // Check monthly fishing effort
+                if (fishdays_completed >= fishday_scenario) {
+
+                    trip_phase <- "completed";
+
+                } else {
+
+                    trip_phase <- "departure";
+                }
             }
         }
     }
 }
+
 }
 
 reflex debug {
@@ -458,6 +526,11 @@ experiment surimi type: gui {
     min: 1
     max: 30
     step: 1;
+    
+    parameter "Beta" var: beta
+    min: 0.0
+    max: 0.1
+    step: 0.001;
 	
     output {
         monitor "Current Month" value: current_month;
